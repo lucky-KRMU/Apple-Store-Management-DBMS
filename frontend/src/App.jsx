@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Apple, MapPin, RefreshCw, ChevronDown, LayoutDashboard, Package, ShoppingBag, Wrench, Users, DollarSign, TrendingUp, CheckCircle2, Building2, Globe2, Search, Plus, Hash, ArrowRight, X, Trash2, ShieldCheck, AlertCircle, Printer, Calendar, Shield, Award, Briefcase, Mail, UserCheck 
+import {
+  Apple, MapPin, RefreshCw, ChevronDown, LayoutDashboard, Package, ShoppingBag, Wrench, Users, DollarSign, TrendingUp, CheckCircle2, Building2, Globe2, Search, Plus, Hash, ArrowRight, X, Trash2, ShieldCheck, AlertCircle, Printer, Calendar, Shield, Award, Briefcase, Mail, UserCheck
 } from "lucide-react";
 const BASE_URL = '/api';
 
@@ -21,13 +21,13 @@ async function handleResponse(response) {
 }
 
 const api = {
-  
+
   checkHealth: async () => {
     const res = await fetch(`${BASE_URL}/health`);
     return handleResponse(res);
   },
 
-  
+
   getStores: async () => {
     const res = await fetch(`${BASE_URL}/stores`);
     return handleResponse(res);
@@ -43,7 +43,7 @@ const api = {
     return handleResponse(res);
   },
 
-  
+
   getDashboardStats: async (filters = {}) => {
     const query = new URLSearchParams();
     if (filters.store_id) query.append('store_id', filters.store_id);
@@ -51,7 +51,7 @@ const api = {
     return handleResponse(res);
   },
 
-  
+
   getProducts: async (filters = {}) => {
     const query = new URLSearchParams();
     if (filters.category_id) query.append('category_id', filters.category_id);
@@ -82,7 +82,7 @@ const api = {
     return handleResponse(res);
   },
 
-  
+
   getInventory: async (filters = {}) => {
     const query = new URLSearchParams();
     if (filters.status) query.append('status', filters.status);
@@ -123,7 +123,7 @@ const api = {
     return handleResponse(res);
   },
 
-  
+
   processCheckout: async (payload) => {
     const res = await fetch(`${BASE_URL}/sales/checkout`, {
       method: 'POST',
@@ -145,7 +145,7 @@ const api = {
     return handleResponse(res);
   },
 
-  
+
   getAppointments: async (filters = {}) => {
     const query = new URLSearchParams();
     if (filters.status) query.append('status', filters.status);
@@ -180,7 +180,7 @@ const api = {
     return handleResponse(res);
   },
 
-  
+
   getEmployees: async (filters = {}) => {
     const query = new URLSearchParams();
     if (filters.role) query.append('role', filters.role);
@@ -248,7 +248,7 @@ export function DashboardView({ stats, currentStore, onNavigateToPOS, onNavigate
             )}
           </div>
           <p className="text-sm text-zinc-400 mt-0.5">
-            {currentStore 
+            {currentStore
               ? `${currentStore.city}, ${currentStore.country} • Store ID: ${currentStore.store_id} • Sales Tax: ${(parseFloat(currentStore.tax_rate) * 100).toFixed(2)}%`
               : 'Overview across all 75 international stores.'}
           </p>
@@ -302,7 +302,7 @@ export function DashboardView({ stats, currentStore, onNavigateToPOS, onNavigate
           </div>
         </div>
 
-        <div 
+        <div
           onClick={onNavigateToGenius}
           className="p-5 rounded-lg bg-zinc-900 border border-zinc-800 shadow-apple-sm flex flex-col justify-between cursor-pointer hover:border-white/20 transition-all"
         >
@@ -350,7 +350,7 @@ export function DashboardView({ stats, currentStore, onNavigateToPOS, onNavigate
               </h2>
               <p className="text-xs text-zinc-400 mt-0.5">Store sales volume and total revenue.</p>
             </div>
-            
+
           </div>
 
           <div className="overflow-x-auto">
@@ -425,7 +425,7 @@ export function DashboardView({ stats, currentStore, onNavigateToPOS, onNavigate
                     </div>
                   </div>
                   <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="bg-white h-1.5 rounded-full transition-all duration-500"
                       style={{ width: `${percent}%` }}
                     />
@@ -451,9 +451,8 @@ export function DashboardView({ stats, currentStore, onNavigateToPOS, onNavigate
                   const isSale = item.type === 'sale';
                   return (
                     <div key={`${item.id}-${idx}`} className="flex items-start gap-3 text-xs">
-                      <div className={`mt-0.5 w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
-                        isSale ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
-                      }`}>
+                      <div className={`mt-0.5 w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isSale ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                        }`}>
                         {isSale ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Wrench className="w-3.5 h-3.5" />}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -593,10 +592,10 @@ function SerialInventoryModal({ product, selectedStoreId, stores, onClose, onRef
         <div className="p-6 border-b border-zinc-800/80 flex items-start justify-between">
           <div className="flex items-center gap-4">
             {product.image_url && (
-              <img 
-                src={product.image_url} 
-                alt={product.name} 
-                className="w-14 h-14 rounded-lg object-cover bg-zinc-950 border border-zinc-800" 
+              <img
+                src={product.image_url}
+                alt={product.name}
+                className="w-14 h-14 rounded-lg object-cover bg-zinc-950 border border-zinc-800"
               />
             )}
             <div>
@@ -611,7 +610,7 @@ function SerialInventoryModal({ product, selectedStoreId, stores, onClose, onRef
               </div>
             </div>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="p-2 rounded-full hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors"
           >
@@ -946,7 +945,7 @@ export function InventoryView({ products, categories, stores, selectedStoreId, o
             )}
           </div>
           <p className="text-sm text-zinc-400 mt-0.5">
-            {currentStore 
+            {currentStore
               ? `Displaying serialized hardware units at ${currentStore.name}.`
               : 'Product catalog and serialized hardware units.'}
           </p>
@@ -966,11 +965,10 @@ export function InventoryView({ products, categories, stores, selectedStoreId, o
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap ${
-              selectedCategory === null
+            className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap ${selectedCategory === null
                 ? 'bg-white text-black shadow-sm'
                 : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700/80'
-            }`}
+              }`}
           >
             All Categories
           </button>
@@ -978,11 +976,10 @@ export function InventoryView({ products, categories, stores, selectedStoreId, o
             <button
               key={cat.category_id}
               onClick={() => setSelectedCategory(cat.category_id)}
-              className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap ${
-                String(selectedCategory) === String(cat.category_id)
+              className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap ${String(selectedCategory) === String(cat.category_id)
                   ? 'bg-white text-black shadow-sm'
                   : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700/80'
-              }`}
+                }`}
             >
               {cat.category_name}
             </button>
@@ -1062,9 +1059,8 @@ export function InventoryView({ products, categories, stores, selectedStoreId, o
                     <span className="text-zinc-500 text-[11px] block">
                       {currentStore ? 'In Store' : 'Available'}
                     </span>
-                    <span className={`font-semibold text-xs font-mono ${
-                      inStock > 0 ? 'text-emerald-400' : 'text-zinc-500'
-                    }`}>
+                    <span className={`font-semibold text-xs font-mono ${inStock > 0 ? 'text-emerald-400' : 'text-zinc-500'
+                      }`}>
                       {inStock} Units
                     </span>
                   </div>
@@ -1140,7 +1136,7 @@ function ReceiptModal({ sale, onClose }) {
           </h2>
           <p className="text-[11px] text-zinc-400">{sale.store_location || sale.store_address || 'Official Retail Network'}</p>
           {sale.store_phone && <p className="text-[10px] text-zinc-500">{sale.store_phone}</p>}
-          
+
           <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium border border-emerald-500/20">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
             Transaction Approved
@@ -1421,9 +1417,9 @@ export function POSCheckoutView({ products, stores, selectedStoreId, onCheckoutC
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
+
         <div className="lg:col-span-7 space-y-6">
-          
+
           <div className="p-6 rounded-xl bg-zinc-900 border border-zinc-800 shadow-apple-sm space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold text-white flex items-center gap-2">
@@ -1628,11 +1624,10 @@ export function POSCheckoutView({ products, stores, selectedStoreId, onCheckoutC
                     key={pm}
                     type="button"
                     onClick={() => setPaymentMethod(pm)}
-                    className={`px-3 py-2 rounded-xl text-xs font-medium border text-center transition-all ${
-                      paymentMethod === pm
+                    className={`px-3 py-2 rounded-xl text-xs font-medium border text-center transition-all ${paymentMethod === pm
                         ? 'border-white bg-white text-black font-semibold shadow-sm'
                         : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:bg-zinc-800 hover:text-white'
-                    }`}
+                      }`}
                   >
                     {pm}
                   </button>
@@ -2004,11 +1999,10 @@ export function GeniusBarView({ stores, selectedStoreId }) {
           <button
             key={st || 'all'}
             onClick={() => setStatusFilter(st)}
-            className={`px-3.5 py-1.5 rounded-full font-medium transition-all ${
-              statusFilter === st
+            className={`px-3.5 py-1.5 rounded-full font-medium transition-all ${statusFilter === st
                 ? 'bg-white text-black shadow-sm'
                 : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
-            }`}
+              }`}
           >
             {st || 'All Appointments'}
           </button>
@@ -2142,7 +2136,7 @@ export function EmployeesView({ stores, selectedStoreId }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
 
-  
+
   const [formData, setFormData] = useState({
     name: '',
     role: 'Specialist',
@@ -2209,8 +2203,8 @@ export function EmployeesView({ stores, selectedStoreId }) {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     return emp.name.toLowerCase().includes(q) ||
-           emp.badge_number.toLowerCase().includes(q) ||
-           emp.email.toLowerCase().includes(q);
+      emp.badge_number.toLowerCase().includes(q) ||
+      emp.email.toLowerCase().includes(q);
   });
 
   return (
@@ -2244,11 +2238,10 @@ export function EmployeesView({ stores, selectedStoreId }) {
             <button
               key={r || 'all'}
               onClick={() => setRoleFilter(r)}
-              className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap ${
-                roleFilter === r
+              className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap ${roleFilter === r
                   ? 'bg-white text-black shadow-sm'
                   : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
-              }`}
+                }`}
             >
               {r ? `${r}s` : 'All Store Staff'}
             </button>
@@ -2495,11 +2488,10 @@ function Sidebar({ activeTab, setActiveTab }) {
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${
-                    isActive
+                  className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${isActive
                       ? 'bg-zinc-800 text-white'
                       : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
-                  }`}
+                    }`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-zinc-400'}`} />
                   <span>{item.label}</span>
@@ -2520,7 +2512,7 @@ function Sidebar({ activeTab, setActiveTab }) {
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [stores, setStores] = useState([]);
-  const [selectedStoreId, setSelectedStoreId] = useState(''); 
+  const [selectedStoreId, setSelectedStoreId] = useState('');
   const [stats, setStats] = useState(null);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -2572,12 +2564,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#09090b] text-[#f4f4f5] antialiased selection:bg-white selection:text-black">
-      <Navbar 
+      <Navbar
         stores={stores}
         selectedStoreId={selectedStoreId}
         onStoreChange={setSelectedStoreId}
-        onRefresh={loadAllData} 
-        isRefreshing={isRefreshing} 
+        onRefresh={loadAllData}
+        isRefreshing={isRefreshing}
       />
 
       <div className="flex-1 flex overflow-hidden">
@@ -2634,14 +2626,14 @@ export default function App() {
               )}
 
               {activeTab === 'genius' && (
-                <GeniusBarView 
+                <GeniusBarView
                   stores={stores}
                   selectedStoreId={selectedStoreId}
                 />
               )}
 
               {activeTab === 'employees' && (
-                <EmployeesView 
+                <EmployeesView
                   stores={stores}
                   selectedStoreId={selectedStoreId}
                 />

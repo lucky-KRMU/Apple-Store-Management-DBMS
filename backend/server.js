@@ -15,7 +15,7 @@ const pool = connectionString
       ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
       max: parseInt(process.env.DB_MAX_CONNECTIONS || '10', 10),
       idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MILLIS || '30000', 10),
-      connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MILLIS || '5000', 10),
+      connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MILLIS || '15000', 10),
     })
   : new Pool({
       host: process.env.DB_HOST || 'localhost',
@@ -25,7 +25,7 @@ const pool = connectionString
       database: process.env.DB_NAME || 'apple_store_db',
       max: parseInt(process.env.DB_MAX_CONNECTIONS || '20', 10),
       idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MILLIS || '30000', 10),
-      connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MILLIS || '5000', 10),
+      connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MILLIS || '15000', 10),
       ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
     });
 
@@ -1207,6 +1207,15 @@ function parseCSVLine(line) {
   return result;
 }
 
+const PRODUCT_IMAGES = {
+  Laptop: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80',
+  Smartphone: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=600&auto=format&fit=crop&q=80',
+  Tablet: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&auto=format&fit=crop&q=80',
+  Wearable: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80',
+  Audio: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80',
+  Accessories: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&auto=format&fit=crop&q=80'
+};
+
 async function seedDatabase(targetPool, customCsvDir) {
   const defaultCsvDir = fs.existsSync(path.join(__dirname, "../database/csv"))
     ? path.join(__dirname, "../database/csv")
@@ -1424,31 +1433,35 @@ async function seedDatabase(targetPool, customCsvDir) {
 
     let empCount = 0;
     const storeIds = Object.keys(storeMap);
+    const empValues = [];
+    const empParams = [];
     for (const s_id of storeIds) {
       const s_name = storeMap[s_id].store_name;
       const roles = [['Specialist', 'SPC'], ['Genius', 'GEN'], ['Manager', 'MGR']];
       for (const [r, prefix] of roles) {
         empCount++;
-        await client.query(
-          `INSERT INTO employees (store_id, name, role, store_location, badge_number, email)
-           VALUES ($1, $2, $3, $4, $5, $6)`,
-          [s_id, `Apple ${prefix} Staff ${empCount}`, r, s_name, `${prefix}-${1000 + empCount}`, `staff.${empCount}@apple.internal`]
-        );
+        const offset = empParams.length;
+        empValues.push(`($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6})`);
+        empParams.push(s_id, `Apple ${prefix} Staff ${empCount}`, r, s_name, `${prefix}-${1000 + empCount}`, `staff.${empCount}@apple.internal`);
       }
+    }
+    if (empValues.length > 0) {
+      await client.query(
+        `INSERT INTO employees (store_id, name, role, store_location, badge_number, email) VALUES ${empValues.join(',')}`,
+        empParams
+      );
     }
     console.log(`✅ Created ${empCount} employees across all ${storeIds.length} stores`);
 
-    
     console.log("📦 Generating physical serialized units across stores from proper products...");
     const prodIds = Object.keys(prodMap);
     let serialId = 0;
     const statuses = ['In Stock', 'In Stock', 'In Stock', 'Reserved', 'In Repair'];
-    
-    
+    const invItems = [];
+
     for (let sIdx = 0; sIdx < Math.min(storeIds.length, 25); sIdx++) {
       const s_id = storeIds[sIdx];
       const s_name = storeMap[s_id].store_name;
-      
       for (let pIdx = 0; pIdx < Math.min(prodIds.length, 30); pIdx++) {
         const p_id = prodIds[pIdx];
         const units = (sIdx < 10) ? 3 : 1;
@@ -1456,24 +1469,34 @@ async function seedDatabase(targetPool, customCsvDir) {
           serialId++;
           const sNum = `F17${s_id.replace('-', '')}${p_id.replace('-', '')}Q${serialId.toString().padStart(4, '0')}`;
           const st = statuses[serialId % statuses.length];
-          await client.query(
-            `INSERT INTO inventory (serial_number, product_id, store_id, status, store_location)
-             VALUES ($1, $2, $3, $4, $5)`,
-            [sNum, p_id, s_id, st, s_name]
-          );
+          invItems.push([sNum, p_id, s_id, st, s_name]);
         }
       }
     }
+
+    for (let i = 0; i < invItems.length; i += 200) {
+      const chunk = invItems.slice(i, i + 200);
+      const valPlaceholders = [];
+      const params = [];
+      chunk.forEach((item) => {
+        const offset = params.length;
+        valPlaceholders.push(`($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5})`);
+        params.push(...item);
+      });
+      await client.query(
+        `INSERT INTO inventory (serial_number, product_id, store_id, status, store_location) VALUES ${valPlaceholders.join(',')}`,
+        params
+      );
+    }
     console.log(`✅ Created ${serialId} physical hardware serialized units in inventory`);
 
-    
     console.log("💳 Loading real transactions from sales.csv...");
     const salesFd = fs.readFileSync(path.join(CSV_DIR, 'sales.csv'), 'utf8');
     const salesLines = salesFd.split('\n');
-    let loadedSales = 0;
     const saleIdSet = new Set();
+    const salesBatch = [];
 
-    for (let i = 1; i < salesLines.length && loadedSales < 10000; i++) {
+    for (let i = 1; i < salesLines.length && salesBatch.length < 10000; i++) {
       const line = salesLines[i].trim();
       if (!line) continue;
       const parts = line.split(',');
@@ -1493,48 +1516,81 @@ async function seedDatabase(targetPool, customCsvDir) {
         const tax = Math.round(subtotal * 0.08875 * 100) / 100;
         const total = Math.round((subtotal + tax) * 100) / 100;
 
-        await client.query(
-          `INSERT INTO sales (sale_id, receipt_number, store_id, customer_id, employee_id, product_id, sale_date, quantity, subtotal, tax_amount, total_amount, payment_method)
-           VALUES ($1, $2, $3, 1, 1, $4, $5, $6, $7, $8, $9, $10)
-           ON CONFLICT (sale_id) DO NOTHING`,
-          [sale_id, `R-${sale_id}`, s_id, p_id, sale_date, qty, subtotal, tax, total, 'Apple Pay']
-        );
+        salesBatch.push([sale_id, `R-${sale_id}`, s_id, p_id, sale_date, qty, subtotal, tax, total, 'Apple Pay']);
         saleIdSet.add(sale_id);
-        loadedSales++;
       }
     }
-    console.log(`✅ Loaded ${loadedSales} real sales transactions from sales.csv`);
 
-    
+    for (let i = 0; i < salesBatch.length; i += 200) {
+      const chunk = salesBatch.slice(i, i + 200);
+      const valPlaceholders = [];
+      const params = [];
+      chunk.forEach((item) => {
+        const offset = params.length;
+        valPlaceholders.push(`($${offset + 1}, $${offset + 2}, $${offset + 3}, 1, 1, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}, $${offset + 8}, $${offset + 9}, $${offset + 10})`);
+        params.push(...item);
+      });
+      await client.query(
+        `INSERT INTO sales (sale_id, receipt_number, store_id, customer_id, employee_id, product_id, sale_date, quantity, subtotal, tax_amount, total_amount, payment_method)
+         VALUES ${valPlaceholders.join(',')}
+         ON CONFLICT (sale_id) DO NOTHING`,
+        params
+      );
+    }
+    console.log(`✅ Loaded ${salesBatch.length} real sales transactions from sales.csv`);
+
     console.log("🔧 Loading warranty claims from warranty.csv...");
     const warLines = fs.readFileSync(path.join(CSV_DIR, 'warranty.csv'), 'utf8').trim().split('\n');
-    let loadedClaims = 0;
-    for (let i = 1; i < warLines.length && loadedClaims < 1000; i++) {
+    const warBatch = [];
+    const apptBatch = [];
+
+    for (let i = 1; i < warLines.length && warBatch.length < 1000; i++) {
       const line = warLines[i].trim();
       if (!line) continue;
       const parts = line.split(',');
       if (parts.length >= 4) {
         const [claim_id, claim_date, s_id, status] = parts;
         if (saleIdSet.has(s_id)) {
-          await client.query(
-            `INSERT INTO warranty (claim_id, claim_date, sale_id, repair_status)
-             VALUES ($1, $2, $3, $4)
-             ON CONFLICT (claim_id) DO NOTHING`,
-            [claim_id, claim_date, s_id, status]
-          );
-
-          
+          warBatch.push([claim_id, claim_date, s_id, status]);
           const stMapped = status === 'Completed' ? 'Completed' : 'In Progress';
-          await client.query(
-            `INSERT INTO appointments (store_id, customer_id, genius_id, appointment_time, issue_description, status, diagnostic_notes)
-             VALUES ('ST-1', 1, 2, $1, $2, $3, $4)`,
-            [claim_date + ' 14:00:00', `Hardware warranty service (Claim ${claim_id})`, stMapped, `Logged from warranty claims database`]
-          );
-          loadedClaims++;
+          apptBatch.push(['ST-1', 1, 2, claim_date + ' 14:00:00', `Hardware warranty service (Claim ${claim_id})`, stMapped, `Logged from warranty claims database`]);
         }
       }
     }
-    console.log(`✅ Loaded ${loadedClaims} warranty claims from warranty.csv into appointments`);
+
+    for (let i = 0; i < warBatch.length; i += 200) {
+      const chunk = warBatch.slice(i, i + 200);
+      const valPlaceholders = [];
+      const params = [];
+      chunk.forEach((item) => {
+        const offset = params.length;
+        valPlaceholders.push(`($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4})`);
+        params.push(...item);
+      });
+      await client.query(
+        `INSERT INTO warranty (claim_id, claim_date, sale_id, repair_status)
+         VALUES ${valPlaceholders.join(',')}
+         ON CONFLICT (claim_id) DO NOTHING`,
+        params
+      );
+    }
+
+    for (let i = 0; i < apptBatch.length; i += 200) {
+      const chunk = apptBatch.slice(i, i + 200);
+      const valPlaceholders = [];
+      const params = [];
+      chunk.forEach((item) => {
+        const offset = params.length;
+        valPlaceholders.push(`($${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7})`);
+        params.push(...item);
+      });
+      await client.query(
+        `INSERT INTO appointments (store_id, customer_id, genius_id, appointment_time, issue_description, status, diagnostic_notes)
+         VALUES ${valPlaceholders.join(',')}`,
+        params
+      );
+    }
+    console.log(`✅ Loaded ${warBatch.length} warranty claims and appointments`);
 
     
     console.log("📊 Building real-world SQL views and stored procedure...");
@@ -1602,7 +1658,7 @@ async function seedDatabase(targetPool, customCsvDir) {
           out_total_amount NUMERIC
       ) 
       LANGUAGE plpgsql
-      AS $
+      AS $$
       DECLARE
           v_receipt_number VARCHAR(64);
           v_new_sale_id VARCHAR(64);
@@ -1673,7 +1729,7 @@ async function seedDatabase(targetPool, customCsvDir) {
 
           RETURN QUERY SELECT v_new_sale_id, v_receipt_number, v_item_count, (v_calculated_subtotal + v_tax_amount);
       END;
-      $;
+      $$;
     `);
 
     console.log("🎉 Real-world Apple Retail dataset migration complete!");
