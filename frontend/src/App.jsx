@@ -1,7 +1,33 @@
 import React, { useState, useEffect } from "react";
-import {
-  Apple, MapPin, RefreshCw, ChevronDown, LayoutDashboard, Package, ShoppingBag, Wrench, Users, DollarSign, TrendingUp, CheckCircle2, Building2, Globe2, Search, Plus, Hash, ArrowRight, X, Trash2, ShieldCheck, AlertCircle, Printer, Calendar, Shield, Award, Briefcase, Mail, UserCheck
-} from "lucide-react";
+import Apple from "lucide-react/dist/esm/icons/apple.js";
+import MapPin from "lucide-react/dist/esm/icons/map-pin.js";
+import RefreshCw from "lucide-react/dist/esm/icons/refresh-cw.js";
+import ChevronDown from "lucide-react/dist/esm/icons/chevron-down.js";
+import LayoutDashboard from "lucide-react/dist/esm/icons/layout-dashboard.js";
+import Package from "lucide-react/dist/esm/icons/package.js";
+import ShoppingBag from "lucide-react/dist/esm/icons/shopping-bag.js";
+import Wrench from "lucide-react/dist/esm/icons/wrench.js";
+import Users from "lucide-react/dist/esm/icons/users.js";
+import DollarSign from "lucide-react/dist/esm/icons/dollar-sign.js";
+import TrendingUp from "lucide-react/dist/esm/icons/trending-up.js";
+import CheckCircle2 from "lucide-react/dist/esm/icons/check-circle-2.js";
+import Building2 from "lucide-react/dist/esm/icons/building-2.js";
+import Globe2 from "lucide-react/dist/esm/icons/globe-2.js";
+import Search from "lucide-react/dist/esm/icons/search.js";
+import Plus from "lucide-react/dist/esm/icons/plus.js";
+import Hash from "lucide-react/dist/esm/icons/hash.js";
+import ArrowRight from "lucide-react/dist/esm/icons/arrow-right.js";
+import X from "lucide-react/dist/esm/icons/x.js";
+import Trash2 from "lucide-react/dist/esm/icons/trash-2.js";
+import ShieldCheck from "lucide-react/dist/esm/icons/shield-check.js";
+import AlertCircle from "lucide-react/dist/esm/icons/alert-circle.js";
+import Printer from "lucide-react/dist/esm/icons/printer.js";
+import Calendar from "lucide-react/dist/esm/icons/calendar.js";
+import Shield from "lucide-react/dist/esm/icons/shield.js";
+import Award from "lucide-react/dist/esm/icons/award.js";
+import Briefcase from "lucide-react/dist/esm/icons/briefcase.js";
+import Mail from "lucide-react/dist/esm/icons/mail.js";
+import UserCheck from "lucide-react/dist/esm/icons/user-check.js";
 const BASE_URL = '/api';
 
 async function handleResponse(response) {
@@ -966,8 +992,8 @@ export function InventoryView({ products, categories, stores, selectedStoreId, o
           <button
             onClick={() => setSelectedCategory(null)}
             className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap ${selectedCategory === null
-                ? 'bg-white text-black shadow-sm'
-                : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700/80'
+              ? 'bg-white text-black shadow-sm'
+              : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700/80'
               }`}
           >
             All Categories
@@ -977,8 +1003,8 @@ export function InventoryView({ products, categories, stores, selectedStoreId, o
               key={cat.category_id}
               onClick={() => setSelectedCategory(cat.category_id)}
               className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap ${String(selectedCategory) === String(cat.category_id)
-                  ? 'bg-white text-black shadow-sm'
-                  : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700/80'
+                ? 'bg-white text-black shadow-sm'
+                : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700/80'
                 }`}
             >
               {cat.category_name}
@@ -1625,8 +1651,8 @@ export function POSCheckoutView({ products, stores, selectedStoreId, onCheckoutC
                     type="button"
                     onClick={() => setPaymentMethod(pm)}
                     className={`px-3 py-2 rounded-xl text-xs font-medium border text-center transition-all ${paymentMethod === pm
-                        ? 'border-white bg-white text-black font-semibold shadow-sm'
-                        : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                      ? 'border-white bg-white text-black font-semibold shadow-sm'
+                      : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:bg-zinc-800 hover:text-white'
                       }`}
                   >
                     {pm}
@@ -2000,8 +2026,8 @@ export function GeniusBarView({ stores, selectedStoreId }) {
             key={st || 'all'}
             onClick={() => setStatusFilter(st)}
             className={`px-3.5 py-1.5 rounded-full font-medium transition-all ${statusFilter === st
-                ? 'bg-white text-black shadow-sm'
-                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+              ? 'bg-white text-black shadow-sm'
+              : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
               }`}
           >
             {st || 'All Appointments'}
@@ -2239,8 +2265,8 @@ export function EmployeesView({ stores, selectedStoreId }) {
               key={r || 'all'}
               onClick={() => setRoleFilter(r)}
               className={`px-3.5 py-1.5 rounded-full font-medium transition-all whitespace-nowrap ${roleFilter === r
-                  ? 'bg-white text-black shadow-sm'
-                  : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
+                ? 'bg-white text-black shadow-sm'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
                 }`}
             >
               {r ? `${r}s` : 'All Store Staff'}
@@ -2489,8 +2515,8 @@ function Sidebar({ activeTab, setActiveTab }) {
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
                   className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${isActive
-                      ? 'bg-zinc-800 text-white'
-                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                    ? 'bg-zinc-800 text-white'
+                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
                     }`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-zinc-400'}`} />

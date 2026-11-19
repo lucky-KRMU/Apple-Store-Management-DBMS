@@ -8,7 +8,11 @@ const { Pool } = require('pg');
 
 dotenv.config();
 
-const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+if (connectionString) {
+  // Strip sslmode from connection string to allow ssl: { rejectUnauthorized: false } for cloud providers
+  connectionString = connectionString.replace(/([?&])sslmode=[^&]+(&|$)/, '$1').replace(/[?&]$/, '');
+}
 const pool = connectionString
   ? new Pool({
       connectionString,
@@ -67,6 +71,34 @@ app.get('/api/health', async (req, res) => {
 });
 
 const api = express.Router();
+
+api.get('/health', async (req, res) => {
+  try {
+    const result = await db.query('SELECT NOW() as current_time, current_database() as database');
+    res.json({
+      status: 'healthy',
+      system: 'Apple Store Management System API (Apple StoreOS)',
+      db_connected: true,
+      server_time: result.rows[0].current_time,
+      database: result.rows[0].database,
+      version: '1.0.0'
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'degraded',
+      db_connected: false,
+      error: error.message
+    });
+  }
+});
+
+api.get('/', (req, res) => {
+  res.json({
+    status: 'healthy',
+    system: 'Apple Store Management System API (Apple StoreOS)',
+    version: '1.0.0'
+  });
+});
 
 api.get('/stores', async (req, res, next) => {
   try {
@@ -1751,6 +1783,20 @@ if (process.argv.includes("--seed")) {
 }
 
 app.use('/api', api);
+
+// Serve frontend build in unified deployment mode (Render, unified Vercel/Docker/Node)
+const frontendDist = path.join(__dirname, '../frontend/dist');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+
+  // SPA fallback for non-API client routes
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
 
 app.use((req, res) => {
   res.status(404).json({

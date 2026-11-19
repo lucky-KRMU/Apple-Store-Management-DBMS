@@ -146,27 +146,71 @@ Enforces store-scoped locking, verifies the device is physically present at the 
 
 ## 🚀 Running the Project
 
-### 1. Database Setup
+### Option A: Unified Full-Stack Run (Single Process)
+Run both the frontend and backend together on a single port (`http://localhost:5001`):
 ```bash
-# Automated database creation and real-world seed data load
-./database/init-db.sh
-```
-
-### 2. Backend Setup
-```bash
-cd backend
+# 1. Install dependencies & build frontend
 npm install
+npm run build
+
+# 2. Start unified server
 npm start
-# API starts at http://localhost:5001
+# App is available at http://localhost:5001 (serves frontend SPA & all /api endpoints)
 ```
 
-### 3. Frontend Setup
+### Option B: Development Mode (Hot Reloading)
 ```bash
-cd frontend
-npm install
-npm run dev
-# Open http://localhost:3000 in your browser
+# Terminal 1 - Backend API (Port 5001)
+npm run dev:backend
+
+# Terminal 2 - Frontend Vite Dev Server (Port 5173 with proxy to backend)
+npm run dev:frontend
 ```
+
+---
+
+## ☁️ Single-Deployment Guide (No Separate Frontend/Backend Needed)
+
+The application is pre-configured for **unified full-stack deployment** on either **Render** or **Vercel** with zero separate frontend and backend deployments.
+
+### 🟣 Deploying to Render (Recommended for Long-Running Web Services)
+
+You can deploy the entire app and a PostgreSQL database in one shot using Render Blueprints or a single Web Service:
+
+#### Method 1: Render Blueprint (Infrastructure-as-Code via `render.yaml`)
+1. Push this repository to GitHub.
+2. In [Render Dashboard](https://dashboard.render.com), click **New +** -> **Blueprint**.
+3. Connect your repository. Render will automatically read `render.yaml`, provision a free PostgreSQL database (`apple-store-db`), build the frontend, and start the unified Node server.
+4. Click **Apply**.
+
+#### Method 2: Manual Web Service on Render
+1. In Render Dashboard, click **New +** -> **Web Service**.
+2. Connect your repository.
+3. Configure settings:
+   - **Environment**: `Node`
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+4. Add Environment Variables:
+   - `DATABASE_URL`: Your PostgreSQL connection string (from Render Postgres, Neon, Supabase, or AWS RDS).
+   - `NODE_ENV`: `production`
+5. Click **Deploy Web Service**.
+
+---
+
+### ▲ Deploying to Vercel (Serverless Full-Stack)
+
+The repository includes a ready-to-use `vercel.json` and serverless bridge (`api/index.js`):
+
+1. Push this repository to GitHub.
+2. In [Vercel Dashboard](https://vercel.com), click **Add New...** -> **Project**.
+3. Import your repository (keep the Root Directory as `./`).
+4. Vercel automatically detects the build configuration:
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `frontend/dist`
+5. Under **Environment Variables**, add:
+   - `DATABASE_URL`: Your remote PostgreSQL connection string (e.g. from Neon, Supabase, or Railway).
+   - `DB_SSL`: `true` (default for cloud databases).
+6. Click **Deploy**. Vercel will serve the frontend from its global CDN edge network and handle all `/api/*` routes via the Express serverless function (`api/index.js`).
 
 ---
 
