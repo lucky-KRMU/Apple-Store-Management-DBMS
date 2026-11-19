@@ -6,11 +6,12 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const { Pool } = require('pg');
 
+dotenv.config({ path: path.join(__dirname, '.env') });
+dotenv.config({ path: path.join(__dirname, '../.env') });
 dotenv.config();
 
 let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 if (connectionString) {
-  // Strip sslmode from connection string to allow ssl: { rejectUnauthorized: false } for cloud providers
   connectionString = connectionString.replace(/([?&])sslmode=[^&]+(&|$)/, '$1').replace(/[?&]$/, '');
 }
 const pool = connectionString
@@ -1784,12 +1785,10 @@ if (process.argv.includes("--seed")) {
 
 app.use('/api', api);
 
-// Serve frontend build in unified deployment mode (Render, unified Vercel/Docker/Node)
 const frontendDist = path.join(__dirname, '../frontend/dist');
 if (fs.existsSync(frontendDist)) {
   app.use(express.static(frontendDist));
 
-  // SPA fallback for non-API client routes
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) {
       return next();
@@ -1846,7 +1845,7 @@ app.use((err, req, res, next) => {
 if (require.main === module && !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`🍏 Apple StoreOS Single-Module Backend running at http://localhost:${PORT}`);
-    console.log(`📡 PostgreSQL Connection Pool targeted at database "${process.env.DB_NAME || 'apple_store_db'}"`);
+    console.log(`📡 PostgreSQL Connection Pool targeted at ${connectionString ? 'Supabase cloud database' : 'local database ' + (process.env.DB_NAME || 'apple_store_db')}`);
   });
 }
 
