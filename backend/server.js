@@ -13,13 +13,17 @@ dotenv.config();
 let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 if (connectionString) {
   connectionString = connectionString.replace(/([?&])sslmode=[^&]+(&|$)/, '$1').replace(/[?&]$/, '');
+  if (connectionString.includes('pooler.supabase.com:5432')) {
+    connectionString = connectionString.replace('pooler.supabase.com:5432', 'pooler.supabase.com:6543');
+  }
 }
+const isServerless = !!process.env.VERCEL;
 const pool = connectionString
   ? new Pool({
       connectionString,
       ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
-      max: parseInt(process.env.DB_MAX_CONNECTIONS || '10', 10),
-      idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MILLIS || '30000', 10),
+      max: isServerless ? 2 : parseInt(process.env.DB_MAX_CONNECTIONS || '10', 10),
+      idleTimeoutMillis: isServerless ? 1000 : parseInt(process.env.DB_IDLE_TIMEOUT_MILLIS || '30000', 10),
       connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MILLIS || '15000', 10),
     })
   : new Pool({
