@@ -621,6 +621,11 @@ function SerialInventoryModal({ product, selectedStoreId, stores, onClose, onRef
               <img
                 src={product.image_url}
                 alt={product.name}
+                loading="lazy"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=600&auto=format&fit=crop&q=80';
+                }}
                 className="w-14 h-14 rounded-lg object-cover bg-zinc-950 border border-zinc-800"
               />
             )}
@@ -1040,6 +1045,11 @@ export function InventoryView({ products, categories, stores, selectedStoreId, o
                     <img
                       src={product.image_url}
                       alt={product.name}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=600&auto=format&fit=crop&q=80';
+                      }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                     />
                   ) : (

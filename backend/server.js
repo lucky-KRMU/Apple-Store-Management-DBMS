@@ -10,13 +10,38 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 dotenv.config({ path: path.join(__dirname, '../.env') });
 dotenv.config();
 
-let connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
-if (connectionString) {
-  connectionString = connectionString.replace(/([?&])sslmode=[^&]+(&|$)/, '$1').replace(/[?&]$/, '');
-  if (connectionString.includes('pooler.supabase.com:5432')) {
-    connectionString = connectionString.replace('pooler.supabase.com:5432', 'pooler.supabase.com:6543');
+function normalizeDbUrl(url) {
+  if (!url) return url;
+  let res = url.replace(/([?&])sslmode=[^&]+(&|$)/, '$1').replace(/[?&]$/, '');
+  if (res.includes('pooler.supabase.com:5432')) {
+    res = res.replace('pooler.supabase.com:5432', 'pooler.supabase.com:6543');
   }
+  const match = res.match(/^postgres(?:ql)?:\/\/(.*)@([^\/]+)\/(.*)$/);
+  if (match) {
+    let auth = match[1];
+    let host = match[2];
+    const db = match[3];
+    const colonIdx = auth.indexOf(':');
+    if (colonIdx !== -1) {
+      let user = auth.slice(0, colonIdx);
+      let pass = auth.slice(colonIdx + 1);
+      if (pass.includes('@') && !pass.includes('%40')) {
+        pass = encodeURIComponent(pass);
+      }
+      if (host.includes('supabase.co') || host.includes('pooler.supabase.com')) {
+        const refMatch = host.match(/db\.([a-z0-9]+)\.supabase\.co/) || user.match(/\.([a-z0-9]+)$/);
+        const ref = refMatch ? (refMatch[1] || refMatch[0]) : null;
+        if (ref && !user.includes('.')) {
+          user = `${user}.${ref}`;
+        }
+        host = 'aws-0-eu-west-1.pooler.supabase.com:6543';
+      }
+      res = `postgresql://${user}:${pass}@${host}/${db}`;
+    }
+  }
+  return res;
 }
+let connectionString = normalizeDbUrl(process.env.DATABASE_URL || process.env.POSTGRES_URL);
 const isServerless = !!process.env.VERCEL;
 const pool = connectionString
   ? new Pool({
@@ -1253,6 +1278,13 @@ const PRODUCT_IMAGES = {
   Accessories: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&auto=format&fit=crop&q=80'
 };
 
+let PRODUCT_REAL_IMAGES = {};
+try {
+  PRODUCT_REAL_IMAGES = require('./product_images.json');
+} catch (e) {
+  PRODUCT_REAL_IMAGES = {};
+}
+
 async function seedDatabase(targetPool, customCsvDir) {
   const defaultCsvDir = fs.existsSync(path.join(__dirname, "../database/csv"))
     ? path.join(__dirname, "../database/csv")
@@ -1440,7 +1472,7 @@ async function seedDatabase(targetPool, customCsvDir) {
       if (parts.length >= 5) {
         const [p_id, p_name, c_id, l_date, price] = parts;
         const cat_name = catMap[c_id] || 'Accessories';
-        const img = PRODUCT_IMAGES[cat_name] || PRODUCT_IMAGES['Accessories'];
+        const img = PRODUCT_REAL_IMAGES[p_id] || PRODUCT_IMAGES[cat_name] || PRODUCT_IMAGES['Accessories'];
         const specs = getSpecsForProduct(p_name, cat_name);
         await client.query(
           `INSERT INTO products (product_id, name, category_id, launch_date, base_price, specs, image_url)
