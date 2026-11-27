@@ -3,24 +3,134 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --apple-bg: #000000;
+    --apple-surface: #121214;
+    --apple-card: #18181b;
+    --apple-card-hover: #1f1f23;
+    --apple-border: rgba(255, 255, 255, 0.08);
+    --apple-border-hover: rgba(255, 255, 255, 0.18);
+  }
+
   body {
+    background-color: #050507;
+    color: #f4f4f5;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    overflow-x: hidden;
   }
 }
 
+/* Apple Liquid Glass Navigation & Panels */
 .glass-nav {
-  background: #09090b;
-  border-bottom: 1px solid #27272a;
+  background: rgba(10, 10, 12, 0.78);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel {
+  background: rgba(18, 18, 22, 0.65);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.35);
 }
 
 .glass-card {
-  background: #121214;
-  border: 1px solid #27272a;
+  background: rgba(24, 24, 28, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.glass-card:hover {
+  background: rgba(30, 30, 36, 0.75);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Apple Inner Specular Sheen */
+.sheen-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%), #141417;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Subtle Apple Glow Accents */
+.glow-blue {
+  box-shadow: 0 0 25px -4px rgba(0, 113, 227, 0.25);
+}
+
+.glow-emerald {
+  box-shadow: 0 0 25px -4px rgba(48, 209, 88, 0.25);
+}
+
+.glow-purple {
+  box-shadow: 0 0 25px -4px rgba(191, 90, 242, 0.25);
+}
+
+.glow-amber {
+  box-shadow: 0 0 25px -4px rgba(255, 159, 10, 0.25);
+}
+
+/* Apple Button Styles */
+.btn-apple-primary {
+  background: #ffffff;
+  color: #000000;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.btn-apple-primary:hover {
+  background: #e5e5e7;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+}
+
+.btn-apple-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-apple-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f4f4f5;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-apple-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.btn-apple-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Badge and Pill Accents */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.1875rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Sleek Minimal Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -28,10 +138,60 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: rgba(255, 255, 255, 0.25);
 }
+
+/* Smooth Fade and Scale Animations */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+/* Apple Metallic & Gradient Accents */
+.text-metallic {
+  background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.apple-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.apple-divider {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+}
+

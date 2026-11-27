@@ -1,90 +1,90 @@
 Product_ID,Product_Name,Category_ID,Launch_Date,Price
-P-1,MacBook,CAT-1,2023-09-17,1149
-P-2,MacBook Air (M1),CAT-1,2023-11-11,1783
-P-3,MacBook Air (M2),CAT-1,2020-05-24,1588
-P-4,MacBook Pro 13-inch,CAT-1,2021-01-17,1351
-P-5,MacBook Pro 14-inch,CAT-1,2024-05-12,768
-P-6,MacBook Pro 16-inch,CAT-1,2021-12-28,1179
-P-7,MacBook (Retina),CAT-1,2023-10-17,231
-P-8,MacBook Air (Retina),CAT-1,2020-01-16,1847
-P-9,MacBook Pro (Touch Bar),CAT-1,2024-06-17,1304
-P-10,MacBook (Early 2015),CAT-1,2022-11-19,741
-P-11,AirPods (2nd Generation),CAT-2,2022-06-13,504
-P-12,AirPods (3rd Generation),CAT-2,2021-05-30,1842
-P-13,AirPods Pro,CAT-2,2024-10-06,1167
-P-14,AirPods Pro (2nd Generation),CAT-2,2021-01-29,696
-P-15,AirPods Max,CAT-2,2022-08-19,1603
-P-16,Beats Studio Buds,CAT-2,2024-05-07,762
-P-17,Beats Fit Pro,CAT-2,2022-12-23,1839
-P-18,Beats Solo Pro,CAT-2,2024-02-26,1773
-P-19,Beats Powerbeats Pro,CAT-2,2020-12-15,1060
-P-20,HomePod (2nd Generation),CAT-2,2020-10-15,689
-P-21,HomePod mini,CAT-2,2022-04-05,438
-P-22,iPad (10th Generation),CAT-3,2021-05-18,1735
-P-23,iPad (9th Generation),CAT-3,2022-03-08,1949
-P-24,iPad mini (6th Generation),CAT-3,2022-11-27,573
-P-25,iPad mini (5th Generation),CAT-3,2023-01-10,1912
-P-26,iPad Air (5th Generation),CAT-3,2021-03-06,1591
-P-27,iPad Air (4th Generation),CAT-3,2021-04-24,952
-P-28,iPad Pro 11-inch,CAT-3,2023-05-07,1761
-P-29,iPad Pro 12.9-inch,CAT-3,2023-11-10,1167
-P-30,iPad Pro (M1),CAT-3,2020-09-14,1329
-P-31,iPad Pro (M2),CAT-3,2021-08-25,1826
-P-32,iPhone 14,CAT-4,2021-06-13,1476
-P-33,iPhone 14 Plus,CAT-4,2023-09-04,1259
-P-34,iPhone 14 Pro,CAT-4,2021-12-24,1380
-P-35,iPhone 14 Pro Max,CAT-4,2024-10-07,678
-P-36,iPhone 13,CAT-4,2023-06-15,623
-P-37,iPhone 13 mini,CAT-4,2021-06-20,1092
-P-38,iPhone 13 Pro,CAT-4,2021-03-22,308
-P-39,iPhone 13 Pro Max,CAT-4,2024-05-09,820
-P-40,iPhone SE (3rd Generation),CAT-4,2022-11-10,923
-P-41,iPhone 12,CAT-4,2020-03-05,1436
-P-42,iPhone 12 mini,CAT-4,2020-10-31,1607
-P-43,iPhone 12 Pro,CAT-4,2024-08-03,1342
-P-44,iPhone 12 Pro Max,CAT-4,2020-09-09,544
-P-45,Apple Watch Series 9,CAT-5,2020-09-12,1014
-P-46,Apple Watch Ultra,CAT-5,2024-08-30,346
-P-47,Apple Watch SE,CAT-5,2020-01-20,1546
-P-48,Apple Watch Nike Edition,CAT-5,2020-06-24,884
-P-49,Apple Watch Hermès,CAT-5,2020-01-01,1712
-P-50,Apple Watch Series 8,CAT-5,2022-07-12,1631
-P-51,Apple Watch Series 7,CAT-5,2020-01-13,1431
-P-52,Apple Watch Series 6,CAT-5,2023-04-27,462
-P-53,Apple Watch Series 5,CAT-5,2023-11-10,1296
-P-54,Apple TV 4K,CAT-6,2023-02-17,1255
-P-55,Apple TV HD,CAT-6,2021-11-24,1258
-P-56,Apple TV (3rd Generation),CAT-6,2020-07-01,477
-P-57,iMac 24-inch,CAT-7,2021-04-07,449
-P-58,iMac 27-inch,CAT-7,2022-05-17,1918
-P-59,iMac Pro,CAT-7,2021-08-20,1081
-P-60,iMac with Retina Display,CAT-7,2020-07-24,343
-P-61,Mac Pro (2023),CAT-7,2023-07-14,681
-P-62,Mac Pro (Tower),CAT-7,2022-10-31,458
-P-63,Mac Pro (Rack),CAT-7,2022-06-06,1415
-P-64,Mac Studio,CAT-7,2024-02-15,613
-P-65,Mac Mini,CAT-7,2020-09-27,555
-P-66,Mac Mini (M2),CAT-7,2021-10-30,874
-P-67,iCloud,CAT-8,2021-01-26,1181
-P-68,Apple Music,CAT-8,2020-09-26,1965
-P-69,Apple TV+,CAT-8,2024-11-04,404
-P-70,Apple Fitness+,CAT-8,2021-05-06,923
-P-71,Apple Arcade,CAT-8,2024-09-13,549
-P-72,Apple News+,CAT-8,2022-01-26,253
-P-73,Apple One,CAT-8,2020-05-02,488
-P-74,HomePod,CAT-9,2020-08-11,1202
-P-75,HomePod mini,CAT-9,2023-06-22,266
-P-76,Magic Keyboard,CAT-10,2020-05-16,368
-P-77,Magic Keyboard with Touch ID,CAT-10,2023-04-09,1162
-P-78,Magic Mouse,CAT-10,2023-08-26,313
-P-79,Magic Trackpad,CAT-10,2024-05-25,1242
-P-80,Apple Pencil (1st Generation),CAT-10,2024-06-30,925
-P-81,Apple Pencil (2nd Generation),CAT-10,2023-06-21,1506
-P-82,Smart Keyboard Folio,CAT-10,2020-03-10,572
-P-83,Smart Cover for iPad,CAT-10,2023-01-25,1014
-P-84,Leather Case for iPhone,CAT-10,2022-06-23,866
-P-85,Silicone Case for iPhone,CAT-10,2022-01-22,1210
-P-86,MagSafe Battery Pack,CAT-10,2020-03-27,1389
-P-87,MagSafe Charger,CAT-10,2024-03-27,1744
-P-88,AirTag,CAT-10,2020-05-11,677
-P-89,Lightning to USB Cable,CAT-10,2024-01-05,1434
+P-1,MacBook Air 13-inch (M2 8-core CPU 8-core GPU 16GB 256GB),CAT-1,2022-07-15,999.00
+P-2,MacBook Air 13-inch (M3 8-core CPU 10-core GPU 16GB 512GB),CAT-1,2024-03-08,1299.00
+P-3,MacBook Air 15-inch (M3 8-core CPU 10-core GPU 16GB 512GB),CAT-1,2024-03-08,1499.00
+P-4,MacBook Pro 14-inch (M4 10-core CPU 10-core GPU 16GB 512GB),CAT-1,2024-11-08,1599.00
+P-5,MacBook Pro 14-inch (M4 Pro 14-core CPU 20-core GPU 24GB 512GB),CAT-1,2024-11-08,2399.00
+P-6,MacBook Pro 16-inch (M4 Pro 14-core CPU 20-core GPU 24GB 512GB),CAT-1,2024-11-08,2499.00
+P-7,MacBook Pro 16-inch (M4 Max 16-core CPU 40-core GPU 48GB 1TB),CAT-1,2024-11-08,3999.00
+P-8,MacBook Pro 14-inch (M3 Pro 11-core CPU 14-core GPU 18GB 512GB),CAT-1,2023-11-07,1999.00
+P-9,MacBook Pro 16-inch (M3 Max 16-core CPU 40-core GPU 48GB 1TB),CAT-1,2023-11-07,3999.00
+P-10,MacBook Air 13-inch (M1 8-core CPU 7-core GPU 8GB 256GB),CAT-1,2020-11-17,699.00
+P-11,AirPods (2nd Generation with Lightning Charging Case),CAT-2,2019-03-20,129.00
+P-12,AirPods 4 (Open-ear Acoustic Architecture),CAT-2,2024-09-20,129.00
+P-13,AirPods 4 with Active Noise Cancellation (Transparency & Adaptive Audio),CAT-2,2024-09-20,179.00
+P-14,AirPods Pro 2 (USB-C MagSafe Case with Speaker & Lanyard Loop),CAT-2,2023-09-22,249.00
+P-15,AirPods Max (USB-C Lossless Audio Space Gray),CAT-2,2024-09-20,549.00
+P-16,Beats Studio Buds + (True Wireless Noise Cancelling Transparent),CAT-2,2023-05-17,169.99
+P-17,Beats Fit Pro (True Wireless Earbuds with Wingtips),CAT-2,2021-11-05,199.99
+P-18,Beats Solo 4 Wireless (On-Ear Headphones Matte Black),CAT-2,2024-05-02,199.99
+P-19,Beats Powerbeats Pro (High-Performance Earphones Navy),CAT-2,2019-05-10,249.95
+P-20,HomePod (2nd Generation Midnight with Spatial Audio),CAT-2,2023-02-03,299.00
+P-21,HomePod mini (Space Gray Room-filling Sound),CAT-2,2020-11-16,99.00
+P-22,iPad (10th Generation Wi-Fi 64GB Blue),CAT-3,2022-10-26,349.00
+P-23,iPad (9th Generation Wi-Fi 64GB Space Gray),CAT-3,2021-09-24,329.00
+P-24,iPad mini (A17 Pro Wi-Fi 128GB Space Gray),CAT-3,2024-10-23,499.00
+P-25,iPad mini (6th Generation Wi-Fi 64GB Purple),CAT-3,2021-09-24,499.00
+P-26,iPad Air 11-inch (M2 Wi-Fi 128GB Starlight),CAT-3,2024-05-15,599.00
+P-27,iPad Air 13-inch (M2 Wi-Fi 128GB Space Gray),CAT-3,2024-05-15,799.00
+P-28,iPad Pro 11-inch (M4 Ultra Retina Tandem OLED 256GB Silver),CAT-3,2024-05-15,999.00
+P-29,iPad Pro 13-inch (M4 Ultra Retina Tandem OLED 256GB Space Black),CAT-3,2024-05-15,1299.00
+P-30,iPad Pro 11-inch (M2 Wi-Fi 128GB Space Gray),CAT-3,2022-10-26,799.00
+P-31,iPad Pro 12.9-inch (M2 Liquid Retina XDR 256GB Space Gray),CAT-3,2022-10-26,1199.00
+P-32,iPhone 16 Pro Max (256GB Desert Titanium Grade 5),CAT-4,2024-09-20,1199.00
+P-33,iPhone 16 Pro (128GB Natural Titanium Grade 5),CAT-4,2024-09-20,999.00
+P-34,iPhone 16 (128GB Ultramarine Ceramic Shield),CAT-4,2024-09-20,799.00
+P-35,iPhone 16 Plus (128GB Teal Ceramic Shield),CAT-4,2024-09-20,899.00
+P-36,iPhone 15 Pro Max (256GB Blue Titanium),CAT-4,2023-09-22,1199.00
+P-37,iPhone 15 Pro (128GB Black Titanium),CAT-4,2023-09-22,999.00
+P-38,iPhone 15 (128GB Black Dynamic Island),CAT-4,2023-09-22,699.00
+P-39,iPhone 15 Plus (128GB Pink Dynamic Island),CAT-4,2023-09-22,799.00
+P-40,iPhone SE (3rd Generation 64GB Midnight),CAT-4,2022-03-18,429.00
+P-41,iPhone 14 (128GB Starlight Super Retina XDR),CAT-4,2022-09-16,599.00
+P-42,iPhone 14 Plus (128GB Midnight Super Retina XDR),CAT-4,2022-10-07,699.00
+P-43,iPhone 13 (128GB Midnight Dual Camera),CAT-4,2021-09-24,499.00
+P-44,iPhone 13 mini (128GB Starlight Compact),CAT-4,2021-09-24,449.00
+P-45,Apple Watch Ultra 2 (49mm Titanium GPS + Cellular Trail Loop),CAT-5,2023-09-22,799.00
+P-46,Apple Watch Ultra 2 (49mm Black Titanium Ocean Band),CAT-5,2024-09-20,799.00
+P-47,Apple Watch Series 10 (46mm Natural Titanium Slate Milanese Loop),CAT-5,2024-09-20,749.00
+P-48,Apple Watch Series 10 (42mm Jet Black Aluminum Sport Band),CAT-5,2024-09-20,399.00
+P-49,Apple Watch Series 10 (46mm Rose Gold Aluminum Sport Loop),CAT-5,2024-09-20,429.00
+P-50,Apple Watch Hermès Series 10 (46mm Titanium Grand H Bracelet),CAT-5,2024-09-20,1299.00
+P-51,Apple Watch SE (44mm Midnight Aluminum Sport Band),CAT-5,2022-09-16,279.00
+P-52,Apple Watch SE (40mm Starlight Aluminum Sport Band),CAT-5,2022-09-16,249.00
+P-53,Apple Watch Series 9 (45mm Midnight Aluminum GPS),CAT-5,2023-09-22,429.00
+P-54,Apple Vision Pro (256GB Micro-OLED 4K Dual M2 + R1 Spatial Computer),CAT-6,2024-02-02,3499.00
+P-55,Apple Vision Pro (512GB Micro-OLED 4K Dual M2 + R1 Spatial Computer),CAT-6,2024-02-02,3699.00
+P-56,Apple TV 4K (128GB Wi-Fi + Ethernet A15 Bionic),CAT-6,2022-11-04,149.00
+P-57,iMac 24-inch (M4 8-core CPU 8-core GPU 16GB 256GB Silver),CAT-7,2024-11-08,1299.00
+P-58,iMac 24-inch (M4 10-core CPU 10-core GPU 24GB 512GB Green Nano-texture),CAT-7,2024-11-08,1899.00
+P-59,Mac mini (M4 10-core CPU 10-core GPU 16GB 256GB Gigabit Ethernet),CAT-7,2024-11-08,599.00
+P-60,Mac mini (M4 Pro 12-core CPU 16-core GPU 24GB 512GB Thunderbolt 5),CAT-7,2024-11-08,1399.00
+P-61,Mac Studio (M2 Max 12-core CPU 30-core GPU 32GB 512GB),CAT-7,2023-06-13,1999.00
+P-62,Mac Studio (M2 Ultra 24-core CPU 60-core GPU 64GB 1TB),CAT-7,2023-06-13,3999.00
+P-63,Mac Pro (Rack Enclosure M2 Ultra 24-core CPU 64GB Unified 1TB SSD),CAT-7,2023-06-13,7499.00
+P-64,Mac Pro (Tower Enclosure M2 Ultra 24-core CPU 64GB Unified 1TB SSD),CAT-7,2023-06-13,6999.00
+P-65,Apple Studio Display (27-inch 5K Retina Standard Glass Tilt-Adjustable),CAT-7,2022-03-18,1599.00
+P-66,Pro Display XDR (32-inch 6K Retina Nano-Texture Glass 1600 nits Peak),CAT-7,2019-12-10,5999.00
+P-67,AppleCare+ for iPhone 16 Pro (2 Years Accidental Damage Coverage),CAT-8,2024-09-20,199.00
+P-68,AppleCare+ with Theft and Loss for iPhone 16 Pro,CAT-8,2024-09-20,269.00
+P-69,AppleCare+ for MacBook Pro 14-inch (3 Years Global Hardware Coverage),CAT-8,2024-11-08,279.00
+P-70,AppleCare+ for MacBook Pro 16-inch (3 Years Global Hardware Coverage),CAT-8,2024-11-08,399.00
+P-71,AppleCare+ for Apple Vision Pro (2 Years Accidental Damage Coverage),CAT-8,2024-02-02,499.00
+P-72,AppleCare+ for iPad Pro 13-inch (2 Years Hardware & Pencil Protection),CAT-8,2024-05-15,179.00
+P-73,AppleCare+ for Apple Watch Ultra 2 (2 Years Extreme Sport Protection),CAT-8,2023-09-22,99.00
+P-74,HomePod (2nd Generation Midnight High-Excursion Woofer),CAT-9,2023-02-03,299.00
+P-75,HomePod mini (Space Gray Full-Range Driver Dual Passive Radiators),CAT-9,2020-11-16,99.00
+P-76,Magic Keyboard with Touch ID for Mac (USB-C Rechargeable),CAT-10,2024-10-28,149.00
+P-77,Magic Keyboard with Touch ID and Numeric Keypad (USB-C Rechargeable),CAT-10,2024-10-28,199.00
+P-78,Magic Mouse (USB-C Multi-Touch Surface),CAT-10,2024-10-28,79.00
+P-79,Magic Trackpad (USB-C Force Touch Haptic Feedback),CAT-10,2024-10-28,129.00
+P-80,Apple Pencil Pro (Squeeze Haptic Feedback Barrel Roll Find My),CAT-10,2024-05-15,129.00
+P-81,Apple Pencil (USB-C Pixel-Perfect Precision),CAT-10,2023-11-01,79.00
+P-82,Magic Keyboard for iPad Pro 13-inch (M4 Aluminum Palm Rest Function Row),CAT-10,2024-05-15,349.00
+P-83,Magic Keyboard for iPad Pro 11-inch (M4 Aluminum Palm Rest),CAT-10,2024-05-15,299.00
+P-84,iPhone 16 Pro FineWoven Case with MagSafe (Taupe / Black / Evergreen),CAT-10,2024-09-20,59.00
+P-85,iPhone 16 Silicone Case with Camera Control Sapphire Crystal (Star Fruit),CAT-10,2024-09-20,49.00
+P-86,MagSafe Battery Pack (Compact Wireless Charging 15W),CAT-10,2021-07-19,99.00
+P-87,MagSafe Charger (2m Braided Cable 25W Qi2 Fast Charging),CAT-10,2024-09-20,39.00
+P-88,AirTag (4 Pack Precision Finding Ultra Wideband U1),CAT-10,2021-04-30,99.00
+P-89,240W USB-C Charge Cable (2 m Durable Braided Design),CAT-10,2023-09-22,29.00

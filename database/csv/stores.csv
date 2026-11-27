@@ -1,76 +1,76 @@
-Store_ID,Store_Name,City,Country
-ST-1,Apple Fifth Avenue,New York,United States
-ST-2,Apple Union Square,San Francisco,United States
-ST-3,Apple Michigan Avenue,Chicago,United States
-ST-4,Apple The Grove,Los Angeles,United States
-ST-5,Apple SoHo,New York,United States
-ST-6,Apple Grand Central,New York,United States
-ST-7,Apple Beverly Center,Los Angeles,United States
-ST-8,Apple Pioneer Place,Portland,United States
-ST-9,Apple Park Visitor Center,Cupertino,United States
-ST-10,Apple South Coast Plaza,Costa Mesa,United States
-ST-11,Apple Ala Moana,Honolulu,United States
-ST-12,Apple North Michigan Avenue,Chicago,United States
-ST-13,Apple Walnut Street,Philadelphia,United States
-ST-14,Apple The Americana at Brand,Glendale,United States
-ST-15,Apple Downtown Brooklyn,Brooklyn,United States
-ST-16,Apple Regent Street,London,United Kingdom
-ST-17,Apple Covent Garden,London,United Kingdom
-ST-18,Apple Champs-Elysees,Paris,France
-ST-19,Apple Opera,Paris,France
-ST-20,Apple Kaerntner Strasse,Vienna,Austria
-ST-21,Apple Passeig de Gracia,Barcelona,Spain
-ST-22,Apple Piazza Liberty,Milan,Italy
-ST-23,Apple Via del Corso,Rome,Italy
-ST-24,Apple Kurfuerstendamm,Berlin,Germany
-ST-25,Apple Schildergasse,Cologne,Germany
-ST-26,Apple Leidseplein,Amsterdam,Netherlands
-ST-27,Apple Rosenstrasse,Munich,Germany
-ST-28,Apple Brompton Road,London,United Kingdom
-ST-29,Apple Galeries Lafayette,Paris,France
-ST-30,Apple Dubai Mall,Dubai,UAE
-ST-31,Apple Shinjuku,Tokyo,Japan
-ST-32,Apple Omotesando,Tokyo,Japan
-ST-33,Apple Marunouchi,Tokyo,Japan
-ST-34,Apple Fukuoka,Fukuoka,Japan
-ST-35,Apple Shanghai IFC,Shanghai,China
-ST-36,Apple Nanjing East,Shanghai,China
-ST-37,Apple Sanlitun,Beijing,China
-ST-38,Apple Taikoo Li,Chengdu,China
-ST-39,Apple Taipei 101,Taipei,Taiwan
-ST-40,Apple Causeway Bay,Hong Kong,China
-ST-41,Apple Central World,Bangkok,Thailand
-ST-42,Apple Orchard Road,Singapore,Singapore
-ST-43,Apple Cotai Central,Macau,China
-ST-44,Apple Kyoto,Kyoto,Japan
-ST-45,Apple Jewel Changi Airport,Singapore,Singapore
-ST-46,Apple Eaton Centre,Toronto,Canada
-ST-47,Apple Rideau Centre,Ottawa,Canada
-ST-48,Apple Sainte-Catherine,Montreal,Canada
-ST-49,Apple Yorkdale,Toronto,Canada
-ST-50,Apple Metrotown,Burnaby,Canada
-ST-51,Apple Sydney,Sydney,Australia
-ST-52,Apple Chadstone,Melbourne,Australia
-ST-53,Apple Brisbane,Brisbane,Australia
-ST-54,Apple Bondi,Bondi,Australia
-ST-55,Apple Highpoint,Melbourne,Australia
-ST-56,Apple Southland,Cheltenham,Australia
-ST-57,Apple Yas Mall,Abu Dhabi,UAE
-ST-58,Apple The Dubai Mall,Dubai,UAE
-ST-59,Apple Mall of the Emirates,Dubai,UAE
-ST-60,Apple Antara,Mexico City,Mexico
-ST-61,Apple Santa Fe,Mexico City,Mexico
-ST-62,Apple Via Santa Fe,Mexico City,Mexico
-ST-63,Apple Parque La Colina,Bogota,Colombia
-ST-64,Apple Andino,Bogota,Colombia
-ST-65,Apple Iconsiam,Bangkok,Thailand
-ST-66,Apple Orchard Road,Singapore,Singapore
-ST-67,Apple Chadstone,Melbourne,Australia
-ST-68,Apple Champs-Elysees,Paris,France
-ST-69,Apple The Dubai Mall,Dubai,UAE
-ST-70,Apple Gangnam,Seoul,South Korea
-ST-71,Apple Yeouido,Seoul,South Korea
-ST-72,Apple Kumamoto,Kumamoto,Japan
-ST-73,Apple Covent Garden,London,United Kingdom
-ST-74,Apple Central World,Bangkok,Thailand
-ST-75,Apple Beijing SKP,Beijing,China
+Store_ID,Store_Name,City,Country,Address,Phone,Tax_Rate,Flagship
+ST-1,"Apple Fifth Avenue","New York","United States","767 5th Ave, New York, NY 10153","+1 (212) 336-1440",0.08875,true
+ST-2,"Apple Union Square","San Francisco","United States","300 Post St, San Francisco, CA 94108","+1 (415) 486-4800",0.08625,true
+ST-3,"Apple Regent Street","London","United Kingdom","235 Regent St, London W1B 2EL","+44 20 7153 9000",0.2,true
+ST-4,"Apple BKC","Mumbai","India","Jio World Drive, Bandra Kurla Complex, Mumbai 400051","+91 22 6922 4100",0.18,true
+ST-5,"Apple Saket","New Delhi","India","Select CITYWALK, District Centre, Saket, New Delhi 110017","+91 11 6922 4100",0.18,false
+ST-6,"Apple Marina Bay Sands","Singapore","Singapore","2 Bayfront Ave, B2-06, Singapore 018972","+65 6932 6000",0.09,true
+ST-7,"Apple Champs-Élysées","Paris","France","114 Av. des Champs-Élysées, 75008 Paris","+33 1 70 98 01 00",0.2,true
+ST-8,"Apple Ginza","Tokyo","Japan","8-9-7 Ginza, Chuo City, Tokyo 104-0061","+81 3 5159 8200",0.1,true
+ST-9,"Apple SoHo","New York","United States","103 Prince St, New York, NY 10012","+1 (212) 226-3126",0.08875,true
+ST-10,"Apple The Grove","Los Angeles","United States","189 The Grove Dr, Los Angeles, CA 90036","+1 (323) 610-7000",0.095,true
+ST-11,"Apple Michigan Avenue","Chicago","United States","401 N Michigan Ave, Chicago, IL 60611","+1 (312) 981-4104",0.1025,true
+ST-12,"Apple Dubai Mall","Dubai","United Arab Emirates","Financial Centre Rd, Downtown Dubai","+971 4 448 9300",0.05,true
+ST-13,"Apple Iconsiam","Bangkok","Thailand","299 Charoen Nakhon Rd, Khlong San, Bangkok 10600","+66 2 055 9600",0.07,true
+ST-14,"Apple Sydney","Sydney","Australia","367 George St, Sydney NSW 2000","+61 2 8083 9400",0.1,true
+ST-15,"Apple Piazza Liberty","Milan","Italy","Piazza del Liberty, 1, 20121 Milano","+39 02 8733 2400",0.22,true
+ST-16,"Apple Kaerntner Strasse","Vienna","Austria","Kärntner Str. 11, 1010 Wien","+43 1 5122550",0.2,true
+ST-17,"Apple Kurfürstendamm","Berlin","Germany","Kurfürstendamm 26, 10719 Berlin","+49 30 590090000",0.19,true
+ST-18,"Apple Covent Garden","London","United Kingdom","1-7 The Piazza, London WC2E 8HB","+44 20 7447 1400",0.2,true
+ST-19,"Apple Grand Central","New York","United States","89 E 42nd St, New York, NY 10017","+1 (212) 284-1800",0.08875,true
+ST-20,"Apple Park Visitor Center","Cupertino","United States","10600 N Tantau Ave, Cupertino, CA 95014","+1 (408) 961-1560",0.09125,true
+ST-21,"Apple Passeig de Gracia","Barcelona","Spain","Passeig de Gràcia, 1, 08007 Barcelona","+34 932 95 05 00",0.21,true
+ST-22,"Apple Via del Corso","Rome","Italy","Via del Corso, 181-188, 00186 Roma","+39 06 8762 9100",0.22,true
+ST-23,"Apple Schildergasse","Cologne","Germany","Schildergasse 1-9, 50667 Köln","+49 221 65009000",0.19,true
+ST-24,"Apple Leidseplein","Amsterdam","Netherlands","Leidseplein 25, 1017 PS Amsterdam","+31 20 530 2200",0.21,true
+ST-25,"Apple Rosenstrasse","Munich","Germany","Rosenstraße 1, 80331 München","+49 89 2424100",0.19,true
+ST-26,"Apple Brompton Road","London","United Kingdom","242 Brompton Rd, London SW3 2BB","+44 20 7590 6000",0.2,true
+ST-27,"Apple Galeries Lafayette","Paris","France","40 Bd Haussmann, 75009 Paris","+33 1 42 82 34 56",0.2,false
+ST-28,"Apple Shinjuku","Tokyo","Japan","3-30-13 Shinjuku, Shinjuku City, Tokyo 160-0022","+81 3 5656 1800",0.1,true
+ST-29,"Apple Omotesando","Tokyo","Japan","4-2-9 Jingumae, Shibuya City, Tokyo 150-0001","+81 3 6757 4400",0.1,true
+ST-30,"Apple Myeongdong","Seoul","South Korea","91 Namdaemun-ro, Jung-gu, Seoul","+82 2-6386-8000",0.1,true
+ST-31,"Apple Gangnam","Seoul","South Korea","464 Gangnam-daero, Gangnam-gu, Seoul","+82 2-6386-8300",0.1,true
+ST-32,"Apple Orchard Road","Singapore","Singapore","270 Orchard Rd, Singapore 238857","+65 6932 6800",0.09,true
+ST-33,"Apple Jewel Changi Airport","Singapore","Singapore","78 Airport Blvd., #02 - 234, Singapore 819666","+65 6932 6820",0.09,false
+ST-34,"Apple Central World","Bangkok","Thailand","4, 4/1-4/2 Rama I Rd, Pathum Wan, Bangkok 10330","+66 2 035 9800",0.07,true
+ST-35,"Apple Causeway Bay","Hong Kong","Hong Kong","Hysan Place, 500 Hennessy Rd, Causeway Bay","+852 3979 3100",0,true
+ST-36,"Apple ifc mall","Hong Kong","Hong Kong","8 Finance St, Central, Hong Kong","+852 3972 1500",0,true
+ST-37,"Apple Canton Road","Hong Kong","Hong Kong","100 Canton Rd, Tsim Sha Tsui, Hong Kong","+852 3979 8800",0,true
+ST-38,"Apple Sanlitun","Beijing","China","Building 6, Sanlitun Taikoo Li South, Chaoyang District, Beijing","+86 10 5931 2100",0.13,true
+ST-39,"Apple Pudong","Shanghai","China","No. 8 Century Ave, Pudong, Shanghai","+86 21 6177 3000",0.13,true
+ST-40,"Apple Nanjing East","Shanghai","China","300 Nanjing E Rd, Huangpu, Shanghai","+86 21 2313 1800",0.13,true
+ST-41,"Apple Taipei 101","Taipei","Taiwan","No. 45, Shifu Rd, Xinyi District, Taipei City","+886 2 8726 3500",0.05,true
+ST-42,"Apple Xinyi A13","Taipei","Taiwan","No. 13, Songren Rd, Xinyi District, Taipei City","+886 2 7742 7700",0.05,true
+ST-43,"Apple Al Maryah Island","Abu Dhabi","United Arab Emirates","The Galleria Al Maryah Island, Abu Dhabi","+971 2 493 0400",0.05,true
+ST-44,"Apple Mall of the Emirates","Dubai","United Arab Emirates","Sheikh Zayed Rd, Al Barsha 1, Dubai","+971 4 406 9000",0.05,true
+ST-45,"Apple Yas Mall","Abu Dhabi","United Arab Emirates","Yas Island, Abu Dhabi","+971 2 493 0500",0.05,false
+ST-46,"Apple Toronto Eaton Centre","Toronto","Canada","220 Yonge St, Toronto, ON M5B 2H1","+1 (416) 646-1300",0.13,true
+ST-47,"Apple Sainte-Catherine","Montreal","Canada","1321 Rue Sainte-Catherine O, Montréal, QC H3G 1P7","+1 (514) 905-2400",0.14975,true
+ST-48,"Apple Pacific Centre","Vancouver","Canada","701 W Georgia St, Vancouver, BC V7Y 1G5","+1 (604) 638-1800",0.12,true
+ST-49,"Apple Antara","Mexico City","Mexico","Av. Ejército Nacional 843B, Granada, Miguel Hidalgo, 11520 Ciudad de México","+52 55 8526 2700",0.16,true
+ST-50,"Apple Morumbi","Sao Paulo","Brazil","Av. Roque Petroni Júnior, 1089 - Jardim das Acacias, São Paulo","+55 11 5180-5900",0.18,true
+ST-51,"Apple VillageMall","Rio de Janeiro","Brazil","Av. das Américas, 3900 - Barra da Tijuca, Rio de Janeiro","+55 21 3179-3700",0.18,true
+ST-52,"Apple Bondi","Sydney","Australia","213 Oxford St, Bondi Junction NSW 2022","+61 2 9019 2400",0.1,false
+ST-53,"Apple Chadstone","Melbourne","Australia","1341 Dandenong Rd, Chadstone VIC 3148","+61 3 8567 4400",0.1,true
+ST-54,"Apple Brisbane","Brisbane","Australia","Queen Street Mall, Brisbane QLD 4000","+61 7 3231 4400",0.1,true
+ST-55,"Apple Perth City","Perth","Australia","Hay Street Mall, Perth WA 6000","+61 8 6140 2400",0.1,true
+ST-56,"Apple Shibuya","Tokyo","Japan","1-20-9 Jinnan, Shibuya City, Tokyo 150-0041","+81 3 6415 3300",0.1,true
+ST-57,"Apple Marunouchi","Tokyo","Japan","2-5-2 Marunouchi, Chiyoda City, Tokyo 100-0005","+81 3 4213 0500",0.1,true
+ST-58,"Apple Kyoto","Kyoto","Japan","Shijo-dori, Shimogyo Ward, Kyoto 600-8006","+81 75 744 1900",0.1,true
+ST-59,"Apple Fukuoka","Fukuoka","Japan","Tenjin, Chuo Ward, Fukuoka 810-0001","+81 92 736 6800",0.1,true
+ST-60,"Apple Garosugil","Seoul","South Korea","43 Apgujeong-ro 12-gil, Gangnam-gu, Seoul","+82 2-6712-6700",0.1,true
+ST-61,"Apple Yeouido","Seoul","South Korea","108 Yeoui-daero, Yeongdeungpo-gu, Seoul","+82 2-6712-6800",0.1,false
+ST-62,"Apple Jamsil","Seoul","South Korea","300 Olympic-ro, Songpa-gu, Seoul","+82 2-6712-6900",0.1,false
+ST-63,"Apple Hongdae","Seoul","South Korea","140 Yanghwa-ro, Mapo-gu, Seoul","+82 2-6712-7000",0.1,false
+ST-64,"Apple Battersea","London","United Kingdom","Battersea Power Station, Circus Rd W, Nine Elms, London SW11 8AL","+44 20 8068 9000",0.2,true
+ST-65,"Apple White City","London","United Kingdom","Westfield London, Ariel Way, London W12 7GF","+44 20 8600 4300",0.2,false
+ST-66,"Apple Marché Saint-Germain","Paris","France","9 Rue Clément, 75006 Paris","+33 1 70 98 02 00",0.2,false
+ST-67,"Apple Puerta del Sol","Madrid","Spain","Pl. de la Puerta del Sol, 1, Centro, 28013 Madrid","+34 917 69 91 00",0.21,true
+ST-68,"Apple Centro Roma","Rome","Italy","Galleria Alberto Sordi, Piazza Colonna, 00187 Roma","+39 06 6979 2400",0.22,false
+ST-69,"Apple Brussels","Brussels","Belgium","Av. de la Toison d'Or 26/28, 1050 Bruxelles","+32 2 404 05 00",0.21,true
+ST-70,"Apple Jungfernstieg","Hamburg","Germany","Jungfernstieg 12, 20354 Hamburg","+49 40 349628000",0.19,true
+ST-71,"Apple Bahnhofstrasse","Zurich","Switzerland","Bahnhofstrasse 77, 8001 Zürich","+41 44 213 18 00",0.081,true
+ST-72,"Apple Rue de Rive","Geneva","Switzerland","Rue de Rive 4, 1204 Genève","+41 22 318 05 00",0.081,true
+ST-73,"Apple Freie Strasse","Basel","Switzerland","Freie Str. 47, 4051 Basel","+41 61 206 18 00",0.081,true
+ST-74,"Apple World Trade Center","New York","United States","185 Greenwich St, LL2240, New York, NY 10007","+1 (212) 206-6040",0.08875,true
+ST-75,"Apple Upper West Side","New York","United States","1981 Broadway, New York, NY 10023","+1 (212) 209-3400",0.08875,true

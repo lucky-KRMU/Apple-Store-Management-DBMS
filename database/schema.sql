@@ -340,3 +340,128 @@ BEGIN
         (v_calculated_subtotal + v_tax_amount);
 END;
 $$;
+
+-- ============================================================================
+-- EXTENDED ENTERPRISE MODULES
+-- ============================================================================
+
+-- 1. AppleCare+ Warranties
+CREATE TABLE IF NOT EXISTS applecare_plans (
+    plan_id SERIAL PRIMARY KEY,
+    serial_number VARCHAR(64) NOT NULL REFERENCES inventory(serial_number) ON DELETE CASCADE,
+    plan_type VARCHAR(50) NOT NULL CHECK (plan_type IN ('Standard 1-Year', 'AppleCare+', 'AppleCare+ Theft & Loss')),
+    start_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    end_date DATE NOT NULL,
+    incidents_remaining INT NOT NULL DEFAULT 2,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Trade-Ins
+CREATE TABLE IF NOT EXISTS trade_ins (
+    trade_in_id SERIAL PRIMARY KEY,
+    customer_id INT REFERENCES customers(customer_id),
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id),
+    device_model VARCHAR(255) NOT NULL,
+    device_serial VARCHAR(64),
+    condition_grade VARCHAR(30) NOT NULL CHECK (condition_grade IN ('Mint', 'Good', 'Cracked Screen', 'Non-Functional')),
+    icloud_unlocked BOOLEAN NOT NULL DEFAULT TRUE,
+    assessed_credit NUMERIC(10, 2) NOT NULL CHECK (assessed_credit >= 0),
+    applied_to_sale_id VARCHAR(64) REFERENCES sales(sale_id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Today at Apple Sessions & RSVPs
+CREATE TABLE IF NOT EXISTS today_at_apple_sessions (
+    session_id SERIAL PRIMARY KEY,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id),
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    lead_specialist_id INT REFERENCES employees(employee_id),
+    session_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    capacity INT NOT NULL DEFAULT 15,
+    location_zone VARCHAR(100) DEFAULT 'Forum / Video Wall',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS session_reservations (
+    reservation_id SERIAL PRIMARY KEY,
+    session_id INT NOT NULL REFERENCES today_at_apple_sessions(session_id) ON DELETE CASCADE,
+    customer_id INT REFERENCES customers(customer_id),
+    customer_name VARCHAR(255),
+    seats_reserved INT NOT NULL DEFAULT 1,
+    attended BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. Inventory Transfers, Replenishment, and Audits
+CREATE TABLE IF NOT EXISTS inventory_transfers (
+    transfer_id SERIAL PRIMARY KEY,
+    transfer_code VARCHAR(32) UNIQUE NOT NULL,
+    source_store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id),
+    destination_store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id),
+    requested_by INT REFERENCES employees(employee_id),
+    approved_by INT REFERENCES employees(employee_id),
+    status VARCHAR(30) NOT NULL CHECK (status IN ('Pending', 'Approved', 'In Transit', 'Received', 'Cancelled')) DEFAULT 'Pending',
+    notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS transfer_items (
+    transfer_item_id SERIAL PRIMARY KEY,
+    transfer_id INT NOT NULL REFERENCES inventory_transfers(transfer_id) ON DELETE CASCADE,
+    serial_number VARCHAR(64) NOT NULL REFERENCES inventory(serial_number)
+);
+
+CREATE TABLE IF NOT EXISTS replenishment_orders (
+    order_id SERIAL PRIMARY KEY,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id),
+    product_id VARCHAR(20) NOT NULL REFERENCES products(product_id),
+    quantity_requested INT NOT NULL CHECK (quantity_requested > 0),
+    status VARCHAR(30) NOT NULL CHECK (status IN ('Draft', 'Submitted', 'Dispatched', 'Delivered')) DEFAULT 'Submitted',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cycle_audits (
+    audit_id SERIAL PRIMARY KEY,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id),
+    conducted_by INT REFERENCES employees(employee_id),
+    matched_count INT NOT NULL DEFAULT 0,
+    missing_count INT NOT NULL DEFAULT 0,
+    unexpected_count INT NOT NULL DEFAULT 0,
+    notes TEXT,
+    audit_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. Genius Bar Repair Parts & Usage
+CREATE TABLE IF NOT EXISTS repair_parts (
+    part_id SERIAL PRIMARY KEY,
+    part_number VARCHAR(64) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    compatible_product_id VARCHAR(20) REFERENCES products(product_id),
+    unit_cost NUMERIC(10, 2) NOT NULL,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id),
+    stock_quantity INT NOT NULL DEFAULT 10
+);
+
+CREATE TABLE IF NOT EXISTS repair_part_usage (
+    usage_id SERIAL PRIMARY KEY,
+    appointment_id INT NOT NULL REFERENCES appointments(appointment_id) ON DELETE CASCADE,
+    part_id INT NOT NULL REFERENCES repair_parts(part_id),
+    quantity INT NOT NULL DEFAULT 1,
+    unit_cost_charged NUMERIC(10, 2) NOT NULL
+);
+
+-- 6. Audit Logs
+CREATE TABLE IF NOT EXISTS audit_logs (
+    log_id BIGSERIAL PRIMARY KEY,
+    store_id VARCHAR(20) REFERENCES stores(store_id),
+    employee_id INT REFERENCES employees(employee_id),
+    action VARCHAR(100) NOT NULL,
+    entity_name VARCHAR(50) NOT NULL,
+    record_id VARCHAR(64),
+    details JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
