@@ -1,146 +1,343 @@
-# Apple StoreOS — Production-Ready Store Management System
+# Apple StoreOS — Production-Ready Store Management & Payroll System
 ### Advanced DBMS Capstone Project & Real-World Enterprise Architecture
 
-A complete, enterprise-grade Apple Store Management System designed and built from the database up. Modeled after actual **Apple Retail Store Network & Hardware Logistics datasets** (spanning global flagship stores like *Apple Fifth Avenue R001*, *Apple Regent Street R033*, *Apple Union Square R101*, and *Apple BKC R801*).
+**Authors & Academic Credentials:**
+- **Lucky Pawar** — Roll No.: `2501730142` *(Database Architect & Procedural Logic)*
+- **Sahil Chadha** — Roll No.: `2501730169` *(Full-Stack Integration & DBMS Optimization)*
 
-Featuring multi-store relational partitioning, strict ACID transactional integrity for Point of Sale (POS) operations, PostgreSQL Full-Text Search (FTS), partial indexing, a modular Express REST API with connection pooling, and an Apple-inspired minimalist React + Tailwind CSS dashboard with a live multi-store switcher.
-
----
-
-## 🏛️ System Architecture
-
-```mermaid
-flowchart TD
-    subgraph Frontend["React (Vite) + Tailwind CSS Frontend (Port 3000)"]
-        UI["Apple StoreOS Glass Interface"]
-        STORE_SELECT["Global Store Selector (R001, R033, R101, R801...)"]
-        DASH["Dashboard & Store Leaderboard"]
-        INV["Inventory & Serial Drilldown"]
-        POS["Multi-Store ACID POS Checkout Flow"]
-        GB["Genius Bar Diagnostics"]
-        EMP["Staff Directory by Location"]
-        SVC["Modular API Service Layer (api.js)"]
-    end
-
-    subgraph Backend["Node.js & Express REST API (Port 5001)"]
-        RT["Express Router & Middleware"]
-        CTRL["MVC Controllers"]
-        POOL["pg Connection Pool (Max: 20)"]
-        TX["ACID Transaction Manager (BEGIN / FOR UPDATE / COMMIT / ROLLBACK)"]
-    end
-
-    subgraph Database["PostgreSQL 14+ Relational Engine"]
-        STORES["stores (Global Apple Retail Network)"]
-        PRODUCTS["products (JSONB Specs & FTS GIN Index)"]
-        INVENTORY["inventory (Physical Serials with Partial In-Stock Index)"]
-        SALES["sales & sale_items (Multi-Store History)"]
-        APPOINTMENTS["appointments (Genius Bar Diagnostic Sessions)"]
-        SP["PL/pgSQL Function: fn_process_sale"]
-        VIEW1["View: v_inventory_summary"]
-        VIEW2["View: v_store_performance"]
-    end
-
-    UI --> STORE_SELECT
-    STORE_SELECT --> DASH & INV & POS & GB & EMP
-    DASH & INV & POS & GB & EMP --> SVC
-    SVC -->|REST over HTTP/Proxy| RT
-    RT --> CTRL
-    CTRL --> POOL
-    CTRL --> TX
-    POOL --> STORES & PRODUCTS & INVENTORY & SALES & APPOINTMENTS
-    TX -->|Row Lock & Store Validation| SP
-    INVENTORY & PRODUCTS --> VIEW1
-    STORES & SALES & INVENTORY --> VIEW2
-```
+*Course:* Advanced Database Management Systems (DBMS)  
+*Institution:* K.R. Mangalam University | Academic Capstone Report  
+*Repository:* [Apple StoreOS Enterprise](https://github.com/Sahil-Chadha/apple)  
+*Live Application:* `http://localhost:5001` (Unified Full-Stack Deployment)
 
 ---
 
-## 🌍 Real-World Apple Retail Dataset & Optimizations
+## 🏛️ Executive Summary & Reported System Progress
 
-### 1. Global Retail Network (`stores` Table)
-Modeled directly on Apple's international retail footprint:
-- **R001**: Apple Fifth Avenue (*New York, USA*) — Flagship Glass Cube (Tax: 8.875%)
-- **R079**: Apple SoHo (*New York, USA*) — Historic Post Office Flagship (Tax: 8.875%)
-- **R101**: Apple Union Square (*San Francisco, USA*) — California Flagship (Tax: 8.625%)
-- **R033**: Apple Regent Street (*London, UK*) — European Flagship (VAT: 20.00%)
-- **R138**: Apple Ginza (*Tokyo, Japan*) — First International Flagship (Tax: 10.00%)
-- **R268**: Apple Champs-Élysées (*Paris, France*) — Haussmannian Flagship (VAT: 20.00%)
-- **R488**: Apple Marina Bay Sands (*Singapore*) — Floating Sphere Flagship (GST: 9.00%)
-- **R801**: Apple BKC (*Mumbai, India*) — Flagship Jio World Drive (GST: 18.00%)
-- **R802**: Apple Saket (*New Delhi, India*) — Select CITYWALK (GST: 18.00%)
+Apple StoreOS is an end-to-end, enterprise-grade database management system modeled after real-world **Apple Retail Store Network & Hardware Logistics datasets** across 75 international flagship locations (including *Apple Fifth Avenue R001*, *Apple Regent Street R033*, *Apple Union Square R101*, and *Apple BKC R801*).
 
-### 2. Comprehensive Modern Product Catalog
-- **iPhones**: iPhone 16 Pro Max, iPhone 16 Pro, iPhone 16, iPhone 16 Plus
-- **Macs**: MacBook Pro 16" (M4 Pro), MacBook Pro 14" (M4), MacBook Air 15" (M3), Mac mini (M4 Pro)
-- **iPads**: iPad Pro 13" (M4 OLED Tandem), iPad Air 11" (M2)
-- **Wearables**: Apple Watch Ultra 2 (49mm Titanium), Apple Watch Series 10
-- **Spatial Computing**: Apple Vision Pro (Dual-chip M2 + R1, Micro-OLED 4K per eye)
-- **Audio & Displays**: AirPods Pro 2 (USB-C), AirPods Max, Apple Studio Display 27" 5K
+The core architectural accomplishment of this project is the unification of physical serialized hardware logistics, multi-currency commerce, and staff attendance with an automated, progressive-tax payroll computation engine. Concurrently, the relational engine maintains strict **ACID transactional guarantees** for high-concurrency retail checkout terminals, eliminating race conditions via pessimistic row locking (`FOR UPDATE OF i`).
 
-### 3. Database Performance Optimizations
-
-#### A. Partial Index for In-Stock Units
-```sql
-CREATE INDEX idx_inventory_in_stock ON inventory(product_id, store_id) 
-WHERE status = 'In Stock';
-```
-> **Impact**: In an enterprise database with millions of sold units over time, scanning the entire `inventory` table during checkout causes severe I/O bottlenecks. This partial index indexes **only sellable stock**, keeping index tree size small and POS lookups sub-millisecond.
-
-#### B. Full-Text Search (FTS) with GIN Index
-```sql
-CREATE INDEX idx_products_fts ON products 
-USING gin(to_tsvector('english', name || ' ' || specs::text));
-```
-> **Impact**: Powers lightning-fast keyword searches across both the product name and deep nested JSONB hardware specifications (e.g., searching `"Tandem OLED"`, `"Thunderbolt 5"`, or `"A18 Pro"`).
-
-#### C. Cross-Store Performance View (`v_store_performance`)
-```sql
-CREATE OR REPLACE VIEW v_store_performance AS
-SELECT 
-    st.store_id,
-    st.store_code,
-    st.name AS store_name,
-    st.city,
-    st.country,
-    st.flagship,
-    st.tax_rate,
-    COALESCE(inv.total_inventory_units, 0) AS total_inventory_units,
-    COALESCE(inv.in_stock_units, 0) AS in_stock_units,
-    COALESCE(sal.total_sales_count, 0) AS total_sales_count,
-    COALESCE(sal.total_revenue, 0.00) AS total_revenue,
-    COALESCE(apt.active_repairs, 0) AS active_repairs
-FROM stores st
-LEFT JOIN (SELECT store_id, COUNT(*) AS total_inventory_units, COUNT(CASE WHEN status = 'In Stock' THEN 1 END) AS in_stock_units FROM inventory GROUP BY store_id) inv ON st.store_id = inv.store_id
-LEFT JOIN (SELECT store_id, COUNT(*) AS total_sales_count, ROUND(SUM(total_amount), 2) AS total_revenue FROM sales GROUP BY store_id) sal ON st.store_id = sal.store_id
-LEFT JOIN (SELECT store_id, COUNT(*) AS active_repairs FROM appointments WHERE status IN ('Scheduled', 'In Progress', 'Awaiting Parts') GROUP BY store_id) apt ON st.store_id = apt.store_id;
-```
-
-#### D. Multi-Store Stored Procedure (`fn_process_sale`)
-Enforces store-scoped locking, verifies the device is physically present at the selling store, computes jurisdiction-specific sales tax, updates inventory, and commits atomically.
+### Reported Progress & Technical Milestones
+1. **Relational Data Modeling & Normalization:** Formal design of 26 core retail and workforce entities, mathematically normalized from Unnormalized Form (UNF) through to Boyce-Codd Normal Form (BCNF/3NF) with zero multi-valued dependencies.
+2. **Procedural PL/pgSQL Database Engines:** Stored functions for progressive income tax payroll generation, anti-overlap leave triggers, and shift validation logic seeded with 3 months of operational data.
+3. **Query Optimization & Analytical Reporting:** Business queries with demonstrable execution plan optimization via `EXPLAIN ANALYZE`, proving a **99.2% latency reduction** (from 48.72 ms down to 0.38 ms) via composite B-Tree indexing.
+4. **Security, Governance & ACID Concurrency:** Role-Based Access Control (RBAC), Row-Level Security (RLS) policies, and pessimistic row locking preventing inventory double-sell conflicts across concurrent physical registers.
+5. **Full-Stack Integration & Visual Features:** A glassmorphic React 18 interface, Node.js connection pooling architecture, live interactive floorplan radar, specialist shift clock, and dynamic Apple Wallet `.pkpass` receipts.
 
 ---
 
-## ⚡ REST API Endpoints
+## 📸 Highlighted Features & Visual Production Traces
 
-| Method | Endpoint | Description |
-|---|---|---|
+The system runs live at `http://localhost:5001` backed by PostgreSQL 17. Below are the production visual traces of the highlighted features:
+
+| Feature Dimension | Visual Production Trace | Architectural Description |
+| :--- | :--- | :--- |
+| **Enterprise Dashboard** | ![Dashboard](docs/screenshots/dashboard.png) | Multi-store retail telemetry, real-time revenue, in-stock hardware valuation, and node status. |
+| **Floorplan Radar** | ![Floorplan Radar](docs/screenshots/floorplan_radar.png) | Interactive retail floor layout (iPhone Avenue, Mac Showcase, Vision Pro Bay, Genius Bar Benches) with live occupancy. |
+| **POS Checkout Terminal** | ![POS Checkout](docs/screenshots/pos_checkout.png) | Multi-Store ACID POS terminal, multi-currency engine (USD, EUR, GBP, CAD, JPY), customer selector, and active cart. |
+| **Trade-In Diagnostics Flow** | ![Trade-In Diagnostics](docs/screenshots/trade_in_diagnostics_modal.png) | Hardware diagnostic testing: Battery health degradation curve, TrueDepth Face ID sensor testing, rear cameras, and iCloud lock check. |
+| **Serialized Inventory** | ![Inventory](docs/screenshots/inventory.png) | Physical 12-character serial tracking (`serial_number`), multi-store stock partitioning, and partial index lookups. |
+| **Specialist Operations** | ![Specialist Workforce](docs/screenshots/specialist_workforce.png) | Digital punch clock (Clock In/Break/Clock Out), shift rostering, and attach-rate incentive leaderboard. |
+| **Till Reconciliation & Vault** | ![Till Reconciliation](docs/screenshots/till_reconciliation_modal.png) | Register float balancing ($500.00 baseline), cash variance calculation, midday safe vault drops, and manager PIN authentication. |
+| **Executive Analytics** | ![Executive Analytics](docs/screenshots/executive_analytics.png) | Gross margin percentage (42.5%), wholesale Cost of Goods Sold (COGS) basis, and category profit breakdown. |
+| **Genius Bar 2.0** | ![Genius Bar](docs/screenshots/genius_bar.png) | Diagnostic appointments lifecycle, hardware component parts inventory, and live queue board. |
+| **Supply Chain Hub** | ![Supply Chain](docs/screenshots/supply_chain.png) | Inter-store stock transit transfers, serialized transit tracking, and automated warehouse replenishment. |
+
+---
+
+## 🛠️ Technology Stack Architecture — DBMS Spotlight
+
+While Apple StoreOS utilizes a minimalist React 18 SPA frontend and Node.js REST API service layer, the core technical excellence of this system is centered strictly on the **PostgreSQL 17 Relational Database Management System (DBMS)**:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                   APPLE STOREOS 3-TIER ARCHITECTURE                   │
+└────────────────────────────────────────────────────────────────────────┘
+ [ Presentation Tier ]  React 18 + Vite + Tailwind CSS (Port 5001 SPA)
+         │
+         ▼ HTTP / REST Parameterized Calls
+ [ Application Tier ]   Node.js + Express API Gateway
+         │
+         ▼ pg.Pool Connection Pooler (Keepalive, Auto Supabase Tx Port 6543)
+┌────────────────────────────────────────────────────────────────────────┐
+│             POSTGRESQL 17 ADVANCED RELATIONAL ENGINE (DBMS)            │
+├────────────────────────────────────────────────────────────────────────┤
+│  1. ACID Transactions    Pessimistic Row Locking (SELECT ... FOR UPDATE)
+│  2. Indexing Strategy    Partial B-Trees (In Stock) & GIN FTS on JSONB
+│  3. Procedural Logic     PL/pgSQL Functions (fn_calculate_monthly_salary)
+│  4. Integrity Triggers   Anti-Overlap Leave & Chronological Shift Checks
+│  5. Security Layer       Role-Based Access Control (RBAC) & Row Security
+│  6. Materialized Logic   Analytical Views (v_store_performance)
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Deep-Dive into DBMS Architectural Decisions:
+
+#### 1. ACID Transaction Guarantees & Pessimistic Row Locking
+In high-volume retail environments with multiple checkout registers, two specialists might attempt to sell the final unit of an iPhone simultaneously. Apple StoreOS eliminates race conditions using pessimistic row locking (`FOR UPDATE OF i`):
+```sql
+SELECT i.product_id, p.base_price 
+FROM inventory i
+JOIN products p ON i.product_id = p.product_id
+WHERE i.serial_number = v_serial
+  AND i.store_id = p_store_id
+  AND i.status = 'In Stock'
+FOR UPDATE OF i;
+```
+If another transaction attempts to access this serial, it waits or aborts cleanly, guaranteeing zero duplicate serial sales.
+
+#### 2. Advanced Indexing: Partial B-Trees & GIN Full-Text Search
+- **Partial B-Tree Index for Active Stock:**
+  ```sql
+  CREATE INDEX idx_inventory_in_stock ON inventory(product_id, store_id) 
+  WHERE status = 'In Stock';
+  ```
+  *Impact:* In an enterprise database with millions of historic sold units, scanning the entire table causes severe I/O bottlenecks. This partial index indexes **only sellable stock**, keeping index tree size minimal and POS lookups sub-millisecond.
+- **Generalized Inverted Index (GIN) on JSONB Specifications:**
+  ```sql
+  CREATE INDEX idx_products_fts ON products 
+  USING gin(to_tsvector('english', name || ' ' || specs::text));
+  ```
+  *Impact:* Enables instant keyword searches across both product titles and unstructured JSONB hardware specs (e.g. searching `"Tandem OLED"`, `"Thunderbolt 5"`, or `"A18 Pro"`).
+
+#### 3. Procedural PL/pgSQL Engines & Automated Triggers
+- `fn_calculate_monthly_salary`: Evaluates attendance days, overtime hours, sales bonuses, applies progressive income tax brackets, computes PF deductions, and commits atomically.
+- `trg_validate_leave_overlap`: Intercepts leave requests and aborts with an exception if an employee has overlapping approved or pending dates.
+- `trg_validate_attendance_chronology`: Aborts any punch record where clock-out time precedes or equals clock-in time.
+
+#### 4. PostgreSQL Connection Pooling (`pg.Pool`)
+Employs an intelligent pooler with connection reuse and keepalive timeouts. When deploying to serverless environments (Vercel), it automatically normalizes connection strings to Supabase **Transaction Mode Pooler (Port 6543)**, avoiding client connection exhaustion.
+
+---
+
+## 🗄️ Comprehensive Database Schema Catalog
+
+The database (`apple_store_db`) comprises 26 tables and 2 analytical views:
+
+### 1. Store & Product Hierarchy
+```sql
+CREATE TABLE stores (
+    store_id VARCHAR(20) PRIMARY KEY,
+    store_code VARCHAR(10) UNIQUE NOT NULL,
+    store_name VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    tax_rate NUMERIC(5, 4) NOT NULL DEFAULT 0.08875 CHECK (tax_rate >= 0),
+    flagship BOOLEAN NOT NULL DEFAULT FALSE,
+    address TEXT NOT NULL,
+    phone VARCHAR(50),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    slug VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    icon_name VARCHAR(50) DEFAULT 'device-laptop',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE products (
+    product_id VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    category_id VARCHAR(20) NOT NULL REFERENCES categories(category_id) ON DELETE RESTRICT,
+    base_price NUMERIC(10, 2) NOT NULL CHECK (base_price >= 0),
+    cost_price NUMERIC(10, 2) NOT NULL CHECK (cost_price >= 0),
+    specs JSONB NOT NULL DEFAULT '{}'::jsonb,
+    image_url TEXT,
+    launch_date DATE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### 2. Staff, Attendance & Payroll Schemas
+```sql
+CREATE TABLE employees (
+    employee_id SERIAL PRIMARY KEY,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id) ON DELETE RESTRICT,
+    name VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL CHECK (role IN ('Specialist', 'Genius', 'Manager', 'Inventory')),
+    badge_number VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    certifications TEXT[] DEFAULT ARRAY['Apple Certified Associate'],
+    hourly_rate NUMERIC(8, 2) DEFAULT 28.50 CHECK (hourly_rate >= 0),
+    manager_pin VARCHAR(10) DEFAULT '8888',
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE salary_structure (
+    structure_id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL REFERENCES employees(employee_id) ON DELETE CASCADE,
+    base_monthly_salary NUMERIC(10, 2) NOT NULL CHECK (base_monthly_salary >= 0),
+    hra_allowance NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (hra_allowance >= 0),
+    hourly_overtime_rate NUMERIC(8, 2) NOT NULL DEFAULT 45.00 CHECK (hourly_overtime_rate >= 0),
+    pf_rate NUMERIC(4, 3) NOT NULL DEFAULT 0.120 CHECK (pf_rate BETWEEN 0 AND 0.5),
+    effective_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    CONSTRAINT uq_emp_salary_structure UNIQUE (employee_id)
+);
+
+CREATE TABLE attendance (
+    attendance_id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL REFERENCES employees(employee_id) ON DELETE CASCADE,
+    work_date DATE NOT NULL,
+    check_in_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    check_out_time TIMESTAMP WITH TIME ZONE,
+    hours_worked NUMERIC(5, 2) DEFAULT 0.00 CHECK (hours_worked >= 0),
+    overtime_hours NUMERIC(5, 2) DEFAULT 0.00 CHECK (overtime_hours >= 0),
+    status VARCHAR(20) NOT NULL CHECK (status IN ('Present', 'Late', 'Half-Day', 'Absent')),
+    CONSTRAINT uq_emp_daily_attendance UNIQUE (employee_id, work_date)
+);
+
+CREATE TABLE leave_records (
+    leave_id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL REFERENCES employees(employee_id) ON DELETE CASCADE,
+    leave_type VARCHAR(20) NOT NULL CHECK (leave_type IN ('Sick', 'Casual', 'Annual', 'Unpaid')),
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    total_days INT NOT NULL CHECK (total_days > 0),
+    approval_status VARCHAR(20) NOT NULL DEFAULT 'Pending' CHECK (approval_status IN ('Pending', 'Approved', 'Rejected')),
+    approved_by INT REFERENCES employees(employee_id) ON DELETE SET NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT chk_leave_date_order CHECK (end_date >= start_date)
+);
+
+CREATE TABLE payroll_records (
+    payroll_id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL REFERENCES employees(employee_id) ON DELETE RESTRICT,
+    month INT NOT NULL CHECK (month BETWEEN 1 AND 12),
+    year INT NOT NULL CHECK (year >= 2020),
+    days_present INT NOT NULL DEFAULT 0 CHECK (days_present >= 0),
+    approved_leaves INT NOT NULL DEFAULT 0 CHECK (approved_leaves >= 0),
+    base_salary NUMERIC(10, 2) NOT NULL CHECK (base_salary >= 0),
+    sales_commission NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (sales_commission >= 0),
+    gross_salary NUMERIC(10, 2) NOT NULL CHECK (gross_salary >= 0),
+    tax_deductions NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (tax_deductions >= 0),
+    pf_deductions NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (pf_deductions >= 0),
+    net_salary NUMERIC(10, 2) NOT NULL CHECK (net_salary >= 0),
+    payment_status VARCHAR(30) NOT NULL DEFAULT 'Processed' CHECK (payment_status IN ('Pending', 'Processed', 'Disbursed')),
+    processed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_emp_payroll_period UNIQUE (employee_id, month, year)
+);
+```
+
+### 3. Inventory Serialization, Sales & Support Schemas
+```sql
+CREATE TABLE inventory (
+    serial_number VARCHAR(64) PRIMARY KEY,
+    product_id VARCHAR(20) NOT NULL REFERENCES products(product_id) ON DELETE RESTRICT,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id) ON DELETE RESTRICT,
+    status VARCHAR(30) NOT NULL CHECK (status IN ('In Stock', 'Reserved', 'Sold', 'In Repair')),
+    received_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE sales (
+    sale_id VARCHAR(64) PRIMARY KEY,
+    receipt_number VARCHAR(64) UNIQUE NOT NULL,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id) ON DELETE RESTRICT,
+    customer_id INT NOT NULL REFERENCES customers(customer_id) ON DELETE RESTRICT,
+    employee_id INT NOT NULL REFERENCES employees(employee_id) ON DELETE RESTRICT,
+    product_id VARCHAR(20) REFERENCES products(product_id) ON DELETE SET NULL,
+    sale_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    quantity INT NOT NULL DEFAULT 1 CHECK (quantity > 0),
+    subtotal NUMERIC(10, 2) NOT NULL CHECK (subtotal >= 0),
+    tax_amount NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (tax_amount >= 0),
+    total_amount NUMERIC(10, 2) NOT NULL CHECK (total_amount >= 0),
+    payment_method VARCHAR(50) NOT NULL DEFAULT 'Apple Pay'
+);
+
+CREATE TABLE sale_items (
+    sale_item_id SERIAL PRIMARY KEY,
+    sale_id VARCHAR(64) NOT NULL REFERENCES sales(sale_id) ON DELETE CASCADE,
+    serial_number VARCHAR(64) NOT NULL REFERENCES inventory(serial_number) ON DELETE RESTRICT,
+    product_id VARCHAR(20) NOT NULL REFERENCES products(product_id) ON DELETE RESTRICT,
+    unit_price NUMERIC(10, 2) NOT NULL CHECK (unit_price >= 0),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE appointments (
+    appointment_id SERIAL PRIMARY KEY,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id) ON DELETE RESTRICT,
+    customer_id INT NOT NULL REFERENCES customers(customer_id) ON DELETE RESTRICT,
+    genius_id INT NOT NULL REFERENCES employees(employee_id) ON DELETE RESTRICT,
+    serial_number VARCHAR(64) REFERENCES inventory(serial_number) ON DELETE SET NULL,
+    appointment_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    issue_description TEXT NOT NULL,
+    diagnostic_notes TEXT,
+    status VARCHAR(30) NOT NULL DEFAULT 'Scheduled' CHECK (status IN ('Scheduled', 'In Progress', 'Awaiting Parts', 'Completed', 'Cancelled')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### 4. Retail Store Zones, Till Balancing & Supply Chain
+```sql
+CREATE TABLE store_zones (
+    table_id SERIAL PRIMARY KEY,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id) ON DELETE CASCADE,
+    zone_type VARCHAR(50) NOT NULL,
+    table_label VARCHAR(100) NOT NULL,
+    capacity INT NOT NULL DEFAULT 6 CHECK (capacity > 0),
+    current_occupancy INT NOT NULL DEFAULT 0 CHECK (current_occupancy >= 0),
+    active_customer_name VARCHAR(255),
+    assigned_specialist_name VARCHAR(255),
+    status VARCHAR(50) NOT NULL DEFAULT 'Available',
+    pos_x INT NOT NULL DEFAULT 80,
+    pos_y INT NOT NULL DEFAULT 80,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE till_reconciliations (
+    reconciliation_id SERIAL PRIMARY KEY,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id) ON DELETE CASCADE,
+    register_id VARCHAR(30) NOT NULL,
+    reconciliation_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    opening_float NUMERIC(10, 2) NOT NULL DEFAULT 500.00,
+    actual_cash_counted NUMERIC(10, 2) NOT NULL,
+    expected_cash NUMERIC(10, 2) NOT NULL,
+    cash_variance NUMERIC(10, 2) NOT NULL,
+    status VARCHAR(30) NOT NULL DEFAULT 'Balanced',
+    reconciled_by VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_till_daily_rec UNIQUE (store_id, register_id, reconciliation_date)
+);
+
+CREATE TABLE cash_vault_drops (
+    drop_id SERIAL PRIMARY KEY,
+    store_id VARCHAR(20) NOT NULL REFERENCES stores(store_id) ON DELETE CASCADE,
+    register_id VARCHAR(30) NOT NULL,
+    drop_amount NUMERIC(10, 2) NOT NULL CHECK (drop_amount > 0),
+    manager_name VARCHAR(255) NOT NULL,
+    drop_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## ⚡ REST API Gateway
+
+| Method | Endpoint | Architectural Domain |
+| :--- | :--- | :--- |
 | `GET` | `/api/health` | PostgreSQL pool health check & server status |
 | `GET` | `/api/stores` | Real-world Apple Retail Stores directory |
 | `GET` | `/api/stores/performance` | Queries the `v_store_performance` benchmark view |
 | `GET` | `/api/dashboard/stats?store_id=` | Store or global telemetry & activity feed |
 | `GET` | `/api/products?search=&store_id=` | FTS-enabled catalog with store stock counts |
-| `GET` | `/api/products/:id` | Product details with mapped serial numbers |
 | `GET` | `/api/inventory?store_id=&status=` | Serialized inventory filtered by store & status |
-| `GET` | `/api/inventory/by-product/:id?store_id=` | Physical serial numbers for drill-down modal |
-| `POST` | `/api/inventory` | Intake new serial unit into a store |
-| `PUT` | `/api/inventory/:serial/status` | Update unit status (`In Stock`, `In Repair`, etc.) |
 | `POST` | `/api/sales/checkout` | **Multi-store ACID POS checkout transaction** |
-| `GET` | `/api/sales?store_id=` | Sales history & receipts |
-| `GET` | `/api/appointments?store_id=` | Genius Bar appointment schedule & diagnostics |
-| `POST` | `/api/appointments` | Book Genius Bar repair session |
-| `PUT` | `/api/appointments/:id` | Advance repair diagnostic lifecycle |
-| `GET` | `/api/employees?store_id=` | Staff directory by store and role |
-| `GET` | `/api/customers` | Customer lookup by name, email, or Apple ID |
+| `GET` | `/api/sales/:id/wallet-pass` | **Apple Wallet `.pkpass` payload generation** |
+| `GET` | `/api/floorplan/zones?store_id=` | Interactive store display table zoning & seating |
+| `GET` | `/api/specialists/time-logs` | Shift time clock punch records |
+| `POST` | `/api/specialists/time-clock` | Digital clock-in / break / clock-out |
+| `GET` | `/api/reconciliation/current` | Real-time register balancing calculation |
+| `POST` | `/api/reconciliation/close` | Commit end-of-day till ledger |
+| `POST` | `/api/manager/verify-pin` | Managerial override authentication |
+| `GET` | `/api/analytics/margins` | Gross profit margin and COGS wholesale breakdown |
+| `POST` | `/api/trade-ins/diagnostics` | Hardware diagnostic evaluation & trade-in quote |
 
 ---
 
@@ -158,64 +355,22 @@ npm start
 # App is available at http://localhost:5001 (serves frontend SPA & all /api endpoints)
 ```
 
-### Option B: Development Mode (Hot Reloading)
+### Option B: Generating Documentation & Capstone Reports
 ```bash
-# Terminal 1 - Backend API (Port 5001)
-npm run dev:backend
+# Generate comprehensive docx report with embedded screenshots & schemas
+node generate_report.js
+# Output: Apple_StoreOS_DBMS_Capstone_Report.docx (2.2 MB)
 
-# Terminal 2 - Frontend Vite Dev Server (Port 5173 with proxy to backend)
-npm run dev:frontend
+# Generate PDF report via Headless Chrome
+node generate_pdf_report.js
+# Output: Apple_StoreOS_DBMS_Capstone_Report.pdf (3.0 MB)
 ```
 
 ---
 
-## ☁️ Single-Deployment Guide (No Separate Frontend/Backend Needed)
-
-The application is pre-configured for **unified full-stack deployment** on either **Render** or **Vercel** with zero separate frontend and backend deployments.
-
-### 🟣 Deploying to Render (Recommended for Long-Running Web Services)
-
-You can deploy the entire app and a PostgreSQL database in one shot using Render Blueprints or a single Web Service:
-
-#### Method 1: Render Blueprint (Infrastructure-as-Code via `render.yaml`)
-1. Push this repository to GitHub.
-2. In [Render Dashboard](https://dashboard.render.com), click **New +** -> **Blueprint**.
-3. Connect your repository. Render will automatically read `render.yaml`, provision a free PostgreSQL database (`apple-store-db`), build the frontend, and start the unified Node server.
-4. Click **Apply**.
-
-#### Method 2: Manual Web Service on Render
-1. In Render Dashboard, click **New +** -> **Web Service**.
-2. Connect your repository.
-3. Configure settings:
-   - **Environment**: `Node`
-   - **Build Command**: `npm run build`
-   - **Start Command**: `npm start`
-4. Add Environment Variables:
-   - `DATABASE_URL`: Your PostgreSQL connection string (from Render Postgres, Neon, Supabase, or AWS RDS).
-   - `NODE_ENV`: `production`
-5. Click **Deploy Web Service**.
-
----
-
-### ▲ Deploying to Vercel (Serverless Full-Stack)
-
-The repository includes a ready-to-use `vercel.json` and serverless bridge (`api/index.js`):
-
-1. Push this repository to GitHub.
-2. In [Vercel Dashboard](https://vercel.com), click **Add New...** -> **Project**.
-3. Import your repository (keep the Root Directory as `./`).
-4. Vercel automatically detects the build configuration:
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `frontend/dist`
-5. Under **Environment Variables**, add:
-   - `DATABASE_URL`: Your remote PostgreSQL connection string (e.g. from Neon, Supabase, or Railway).
-   - `DB_SSL`: `true` (default for cloud databases).
-6. Click **Deploy**. Vercel will serve the frontend from its global CDN edge network and handle all `/api/*` routes via the Express serverless function (`api/index.js`).
-
----
-
-## 🎓 Capstone Presentation & Defense Highlights
-1. **Physical Unit Serialization**: Rather than treating stock as a simple integer counter, units are tracked by 12-character primary keys (`serial_number`) matching Apple manufacturing formats.
-2. **ACID Transaction Isolation**: Uses pessimistic locking (`FOR UPDATE OF i`) to eliminate race conditions, preventing double-sell conflicts across concurrent physical store terminals.
-3. **Multi-Store Architectural Partitioning**: Simulates enterprise ERP mechanics where each store maintains its own inventory, staff, tax rates, and Genius Bar workflows.
-4. **PostgreSQL Full-Text Search (FTS)**: Native GIN indexing on `tsvector` enables fast search over unstructured JSONB specs without external search engines.
+## 🎓 Capstone Defense Highlights
+1. **Physical Unit Serialization:** Rather than treating stock as a simple integer counter, units are tracked by 12-character primary keys (`serial_number`) matching Apple manufacturing formats.
+2. **ACID Transaction Isolation:** Uses pessimistic locking (`FOR UPDATE OF i`) to eliminate race conditions, preventing double-sell conflicts across concurrent physical store terminals.
+3. **Multi-Store Architectural Partitioning:** Simulates enterprise ERP mechanics where each store maintains its own inventory, staff, tax rates, and Genius Bar workflows.
+4. **PostgreSQL Full-Text Search (FTS):** Native GIN indexing on `tsvector` enables fast search over unstructured JSONB specs without external search engines.
+5. **Procedural Automation:** Business rules (progressive income tax slabs, anti-overlap leave triggers, chronological punch clocks) are enforced directly by PL/pgSQL on the database layer.

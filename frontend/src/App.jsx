@@ -3294,7 +3294,16 @@ function Sidebar({ activeTab, setActiveTab, currentStore, currentRole }) {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const getInitialTab = () => {
+    try {
+      const p = new URLSearchParams(window.location.search).get('tab');
+      if (p) return p;
+      const h = window.location.hash.replace('#', '');
+      if (h) return h;
+    } catch (e) {}
+    return 'dashboard';
+  };
+  const [activeTab, setActiveTab] = useState(getInitialTab);
   const [currentRole, setCurrentRole] = useState('Manager');
   const [isLiveQueueOpen, setIsLiveQueueOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('USD');

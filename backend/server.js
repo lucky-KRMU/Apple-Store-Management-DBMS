@@ -132,6 +132,20 @@ api.get('/', (req, res) => {
 
 api.get('/stores', async (req, res, next) => {
   try {
+    let addressField = 's.address';
+    try {
+      const colCheck = await db.query(`
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name='stores' AND column_name='address'
+      `);
+      if (colCheck.rows.length === 0) {
+        addressField = "(s.city || ', ' || s.country) AS address";
+      }
+    } catch (e) {
+      addressField = "(s.city || ', ' || s.country) AS address";
+    }
+
     const query = `
       SELECT 
         s.store_id,
@@ -140,7 +154,7 @@ api.get('/stores', async (req, res, next) => {
         s.store_id AS store_code,
         s.city,
         s.country,
-        s.address,
+        ${addressField},
         s.tax_rate,
         s.flagship,
         s.phone,
@@ -3190,8 +3204,24 @@ app.use((err, req, res, next) => {
   });
 });
 
+async function ensureSchemaCompatibility() {
+  try {
+    await db.query(`
+      ALTER TABLE stores ADD COLUMN IF NOT EXISTS address TEXT;
+      UPDATE stores SET address = city || ', ' || country WHERE address IS NULL;
+      ALTER TABLE products ADD COLUMN IF NOT EXISTS cost_price NUMERIC;
+      ALTER TABLE employees ADD COLUMN IF NOT EXISTS certifications JSONB DEFAULT '["Apple Certified Associate", "Genius Bar Level 1"]'::jsonb;
+      ALTER TABLE employees ADD COLUMN IF NOT EXISTS hourly_rate NUMERIC DEFAULT 32.50;
+      ALTER TABLE employees ADD COLUMN IF NOT EXISTS manager_pin VARCHAR(10) DEFAULT '1234';
+    `);
+  } catch (e) {
+    // Ignore non-fatal schema check errors
+  }
+}
+
 if (require.main === module && !process.env.VERCEL) {
   app.listen(PORT, () => {
+    ensureSchemaCompatibility();
     console.log(`🍏 Apple StoreOS Single-Module Backend running at http://localhost:${PORT}`);
     console.log(`📡 PostgreSQL Connection Pool targeted at ${connectionString ? 'Supabase cloud database' : 'local database ' + (process.env.DB_NAME || 'apple_store_db')}`);
   });
